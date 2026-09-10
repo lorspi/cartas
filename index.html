@@ -36,17 +36,25 @@
       })();
     </script>
     <script>
-      // Apply the saved theme before first paint so the .dark class is
-      // authoritative from the start (prevents flash and OS-preference mismatch).
+      // Apply the theme before first paint so the .dark class is authoritative
+      // from the start (prevents flash). If the user picked a theme we honor it;
+      // otherwise we fall back to the browser / OS color-scheme preference.
       (function () {
         try {
           var saved = localStorage.getItem('cartas_que_quedan_theme');
-          var isDark = saved === 'dark';
+          var isDark;
+          if (saved === 'dark' || saved === 'light') {
+            isDark = saved === 'dark';
+          } else {
+            isDark =
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
           document.documentElement.classList.toggle('dark', isDark);
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/cartas/assets/index-BnsO0xrn.js"></script>
+    <script type="module" crossorigin src="/cartas/assets/index-BNxCnLA3.js"></script>
     <link rel="modulepreload" crossorigin href="/cartas/assets/markdown-BbsDIvqd.js">
     <link rel="modulepreload" crossorigin href="/cartas/assets/react-_cmU9Ofy.js">
     <link rel="stylesheet" crossorigin href="/cartas/assets/index-BU6vHsER.css">
