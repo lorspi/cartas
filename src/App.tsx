@@ -95,6 +95,11 @@ export default function App() {
     localStorage.setItem('cartas_que_quedan_fontsize', size);
   };
 
+  // Focus ("Lectura") mode lives here at the app level so it can hide the
+  // header (nav) and footer for a distraction-free reading experience. The
+  // letter detail view toggles it and also hides its own chrome.
+  const [isFocusMode, setIsFocusMode] = useState(false);
+
   // 3. Routing & Path Management
   // BASE_URL is the deploy sub-path Vite serves from (e.g. "/cartas/" on
   // GitHub Pages, "/" on a custom domain). We strip it before matching routes
@@ -169,6 +174,14 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Leaving the letter view should always drop us out of focus mode, otherwise
+  // the header/footer would stay hidden on the home/archive/about pages.
+  useEffect(() => {
+    if (currentView.type !== 'letter' && isFocusMode) {
+      setIsFocusMode(false);
+    }
+  }, [currentView, isFocusMode]);
+
   // Update document title and Open Graph meta tags dynamically based on view
   useEffect(() => {
     if (currentView.type === 'letter') {
@@ -195,13 +208,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#ece9e4] dark:bg-[#1c1b1b] text-[#211e1c] dark:text-[#ede7e0] transition-colors duration-200 selection:bg-[#b84e2a]/20 selection:text-[#211e1c] dark:selection:bg-[#cf6e4b]/30 dark:selection:text-[#ede7e0]">
-      {/* Editorial Header */}
-      <Header
-        currentView={currentView}
-        onNavigate={(view) => navigate(view)}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {/* Editorial Header (hidden while reading in focus mode) */}
+      {!isFocusMode && (
+        <Header
+          currentView={currentView}
+          onNavigate={(view) => navigate(view)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
+      )}
 
       {/* Main Content View */}
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8">
@@ -247,6 +262,8 @@ export default function App() {
             onToggleTheme={toggleTheme}
             fontSize={fontSize}
             onChangeFontSize={handleFontSizeChange}
+            isFocusMode={isFocusMode}
+            onToggleFocusMode={() => setIsFocusMode((prev) => !prev)}
           />
         )}
 
@@ -259,8 +276,8 @@ export default function App() {
         </Suspense>
       </main>
 
-      {/* Editorial Footer */}
-      <Footer onNavigate={(view) => navigate(view)} />
+      {/* Editorial Footer (hidden while reading in focus mode) */}
+      {!isFocusMode && <Footer onNavigate={(view) => navigate(view)} />}
     </div>
   );
 }

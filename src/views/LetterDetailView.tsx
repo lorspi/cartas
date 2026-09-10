@@ -135,6 +135,8 @@ interface LetterDetailViewProps {
   onToggleTheme: () => void;
   fontSize: FontSizeScale;
   onChangeFontSize: (size: FontSizeScale) => void;
+  isFocusMode: boolean;
+  onToggleFocusMode: () => void;
 }
 
 export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
@@ -147,8 +149,9 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   onToggleTheme,
   fontSize,
   onChangeFontSize,
+  isFocusMode,
+  onToggleFocusMode,
 }) => {
-  const [isFocusMode, setIsFocusMode] = useState(false);
   const [copied, setCopied] = useState(false);
 
   // Scroll to top when letter changes
@@ -212,16 +215,16 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
       {/* Discreet Reading Progress Bar */}
       <ReadingProgress />
 
-      {/* Floating / Sticky Reading Controls bar */}
-      <div className="sticky top-20 z-30 flex justify-end mb-4 pointer-events-none">
-        <div className="pointer-events-auto bg-[#ece9e4]/95 dark:bg-[#1c1b1b]/95 p-1 rounded-sm shadow-xs backdrop-blur-xs">
+      {/* Floating Action Button: reading controls anchored to the bottom-right */}
+      <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 pointer-events-none">
+        <div className="pointer-events-auto bg-[#ece9e4]/95 dark:bg-[#1c1b1b]/95 p-1 rounded-full shadow-lg ring-1 ring-[#dad4cb]/60 dark:ring-[#383633]/60 backdrop-blur-xs">
           <ReadingControls
             fontSize={fontSize}
             onChangeFontSize={onChangeFontSize}
             theme={theme}
             onToggleTheme={onToggleTheme}
             isFocusMode={isFocusMode}
-            onToggleFocusMode={() => setIsFocusMode(!isFocusMode)}
+            onToggleFocusMode={onToggleFocusMode}
           />
         </div>
       </div>

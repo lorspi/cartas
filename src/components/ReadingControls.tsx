@@ -44,7 +44,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
     <div
       id="reading-controls-bar"
       aria-label="Controles de lectura"
-      className={`inline-flex items-center gap-1 sm:gap-1.5 p-1 bg-[#f5f1ec] dark:bg-[#242321] border border-[#dad4cb] dark:border-[#383633] rounded-sm text-xs font-sans text-[#6b645c] dark:text-[#9c958c] shadow-xs ${className}`}
+      className={`inline-flex items-center gap-1 sm:gap-1.5 p-1 bg-[#f5f1ec] dark:bg-[#242321] border border-[#dad4cb] dark:border-[#383633] rounded-full text-xs font-sans text-[#6b645c] dark:text-[#9c958c] shadow-xs ${className}`}
     >
       {/* Font Size decrease: A- */}
       <button
@@ -53,7 +53,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         disabled={currentIndex === 0}
         aria-label="Disminuir tamaño de letra"
         title="Reducir tipografía (A-)"
-        className={`px-2 py-1 rounded-xs transition-colors font-serif ${
+        className={`px-2 py-1 rounded-full transition-colors font-serif ${
           currentIndex === 0
             ? 'opacity-30 cursor-not-allowed'
             : 'hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0]'
@@ -68,7 +68,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         onClick={handleReset}
         aria-label="Tamaño normal de letra"
         title="Tamaño original (A)"
-        className={`px-2 py-1 rounded-xs transition-colors font-serif ${
+        className={`px-2 py-1 rounded-full transition-colors font-serif ${
           fontSize === 'base'
             ? 'bg-[#ece9e4] dark:bg-[#2a2927] text-[#211e1c] dark:text-[#ede7e0] font-medium'
             : 'hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0]'
@@ -84,7 +84,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         disabled={currentIndex === sizes.length - 1}
         aria-label="Aumentar tamaño de letra"
         title="Aumentar tipografía (A+)"
-        className={`px-2 py-1 rounded-xs transition-colors font-serif ${
+        className={`px-2 py-1 rounded-full transition-colors font-serif ${
           currentIndex === sizes.length - 1
             ? 'opacity-30 cursor-not-allowed'
             : 'hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0]'
@@ -101,7 +101,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         onClick={onToggleTheme}
         aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo noche'}
         title={theme === 'dark' ? 'Papel claro' : 'Tinta nocturna'}
-        className="p-1.5 rounded-xs hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
+        className="p-1.5 rounded-full hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
       >
         {theme === 'dark' ? (
           <Sun className="w-3.5 h-3.5 text-[#d0a65c]" strokeWidth={1.75} />
@@ -118,7 +118,7 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         onClick={onToggleFocusMode}
         aria-label={isFocusMode ? 'Salir de modo lectura' : 'Activar modo lectura silenciosa'}
         title={isFocusMode ? 'Salir de modo lectura' : 'Modo lectura pausada'}
-        className={`flex items-center gap-1 px-2 py-1 rounded-xs transition-colors ${
+        className={`flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
           isFocusMode
             ? 'bg-[#b84e2a]/10 dark:bg-[#cf6e4b]/15 text-[#b84e2a] dark:text-[#cf6e4b] font-medium'
             : 'hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0]'
