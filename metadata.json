@@ -1,0 +1,6 @@
+{
+  "name": "Cartas que quedan",
+  "description": "Un archivo digital de cartas, preguntas y reflexiones sobre esas cosas que seguimos intentando entender.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-paper: #ece9e4;
+    --bg-paper-secondary: #f5f1ec;
+    --surface-clean: #ffffff;
+    --text-ink: #211e1c;
+    --text-muted: #6b645c;
+    --border-subtle: #dad4cb;
+    --accent-terracotta: #b84e2a;
+    --accent-gold: #aa7d33;
+    --accent-brown: #5d4837;
+  }
+
+  .dark {
+    --bg-paper: #1c1b1b;
+    --bg-paper-secondary: #242321;
+    --surface-clean: #2a2927;
+    --text-ink: #ede7e0;
+    --text-muted: #9c958c;
+    --border-subtle: #383633;
+    --accent-terracotta: #cf6e4b;
+    --accent-gold: #cfa152;
+    --accent-brown: #9e8a78;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-paper);
+    color: var(--text-ink);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    min-height: 100vh;
+  }
+}
+
+.font-serif {
+  font-family: 'Lora', 'Source Serif 4', Georgia, Cambria, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Editorial Drop Cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 3.4em;
+  line-height: 0.8;
+  margin-top: 0.08em;
+  margin-right: 0.16em;
+  margin-bottom: -0.05em;
+  font-weight: 500;
+  color: var(--text-ink);
+}
+
+/* Editorial line-clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
