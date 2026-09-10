@@ -11,12 +11,47 @@ import { Quote } from '../components/Quote';
 
 type StyleScale = { p: string; h: string; quote: string };
 
+/** Reads the first meaningful character of the markdown body, skipping any
+ *  leading markdown syntax that wraps inline text (e.g. `**bold**`, `_em_`,
+ *  `> quote`) so we inspect the first *visible* character the reader sees. */
+function firstVisibleChar(body: string): string {
+  // Work line-by-line: skip blank lines, HTML blocks, headings, dividers,
+  // list markers and blockquote markers until we reach real prose.
+  for (const rawLine of body.split(/\r?\n/)) {
+    let line = rawLine.trim();
+    if (!line) continue;
+    // Skip block-level markdown / HTML that never becomes the first paragraph.
+    if (line.startsWith('#')) continue; // heading
+    if (line.startsWith('---') || line.startsWith('***')) continue; // divider
+    if (line.startsWith('<')) continue; // raw HTML block (e.g. <blockquote>)
+    // Strip leading inline-formatting markers so `**Word**` reports `W`.
+    line = line.replace(/^[>\s]*/, ''); // blockquote markers / indentation
+    line = line.replace(/^(?:[*_`~]+|\d+\.\s+|[-+*]\s+)/, ''); // emphasis / list
+    line = line.trimStart();
+    if (line) return line[0];
+  }
+  return '';
+}
+
+/** True when the given character is an actual letter (Unicode-aware, so
+ *  accented characters like «Á» count), rather than a symbol such as an em
+ *  dash «—», a quote «"», etc. Used to decide whether to apply the drop cap. */
+function isLetter(char: string): boolean {
+  return !!char && /\p{L}/u.test(char);
+}
+
 /** Renders a letter's markdown body, mapping our content conventions
  *  (data-biblical/data-ref blockquotes, `## ` headings, `---` dividers)
  *  onto the same visual language the old structured content blocks used. */
 function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
   const paragraphIndex = useRef(0);
   paragraphIndex.current = 0;
+
+  // Decide once, from the raw markdown, whether the letter opens with a real
+  // letter. If it opens with a symbol (e.g. the dialogue em dash «—»), we skip
+  // the drop cap so we never float a giant punctuation mark. This is computed
+  // from the source text so it behaves identically in dev and on GitHub Pages.
+  const bodyStartsWithLetter = isLetter(firstVisibleChar(body));
 
   return (
     <ReactMarkdown
@@ -26,10 +61,13 @@ function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
         p: ({ children }) => {
           const isFirstParagraph = paragraphIndex.current === 0;
           paragraphIndex.current += 1;
+          // Only apply the drop cap on the first paragraph AND only when the
+          // letter's first visible character is an actual letter.
+          const applyDropCap = isFirstParagraph && bodyStartsWithLetter;
           return (
             <p
               className={`${styles.p} ${
-                isFirstParagraph ? 'drop-cap' : ''
+                applyDropCap ? 'drop-cap' : ''
               } mb-7 text-justify sm:text-left text-[#2b2725] dark:text-[#e4ded6] font-light`}
             >
               {children}
