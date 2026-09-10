@@ -249,10 +249,12 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
           {/* Metadata Row: Index, Category, Year */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-sans pb-4 border-b border-[#dad4cb]/70 dark:border-[#383633]/70">
             <div className="flex items-center gap-3">
+              {/* 
               <span className="font-serif text-sm text-[#8c8479] dark:text-[#7d756a]">
                 Documento {letter.indexNumber}
               </span>
               <span className="text-[#dad4cb] dark:text-[#383633]">·</span>
+              */}
               <CategoryBadge
                 category={letter.category}
                 secondaryCategory={letter.secondaryCategory}

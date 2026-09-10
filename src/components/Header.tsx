@@ -58,6 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
             Archivo
           </button>
 
+          {/*
           <button
             id="nav-link-categories"
             onClick={() => handleNavClick({ type: 'archive', category: 'all' })}
@@ -65,6 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Categorías
           </button>
+          */}
 
           <button
             id="nav-link-about"
@@ -132,6 +134,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Archivo de documentos
             </button>
+            {/* 
             <button
               id="mobile-nav-categories"
               onClick={() => handleNavClick({ type: 'archive', category: 'all' })}
@@ -139,6 +142,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Explorar por tema
             </button>
+            */}
             <button
               id="mobile-nav-about"
               onClick={() => handleNavClick({ type: 'about' })}

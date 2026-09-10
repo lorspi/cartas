@@ -26,10 +26,12 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
         {/* Top meta row: Number and Category */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
+            {/*
             <span className="font-serif text-sm sm:text-base font-normal text-[#8c8479] dark:text-[#7d756a] tracking-wider">
               {letter.indexNumber}
             </span>
             <span className="text-[#dad4cb] dark:text-[#383633]">/</span>
+            */}
             <CategoryBadge
               category={letter.category}
               secondaryCategory={letter.secondaryCategory}
@@ -37,9 +39,11 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
             />
           </div>
 
+          {/*
           <span className="font-sans text-xs text-[#8c8479] dark:text-[#7d756a]">
             {letter.year}
           </span>
+          */}
         </div>
 
         {/* Letter Title */}
