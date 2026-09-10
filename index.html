@@ -36,12 +36,20 @@
       })();
     </script>
     <script>
-      // Apply the saved theme before first paint so the .dark class is
-      // authoritative from the start (prevents flash and OS-preference mismatch).
+      // Apply the theme before first paint so the .dark class is authoritative
+      // from the start (prevents flash). If the user picked a theme we honor it;
+      // otherwise we fall back to the browser / OS color-scheme preference.
       (function () {
         try {
           var saved = localStorage.getItem('cartas_que_quedan_theme');
-          var isDark = saved === 'dark';
+          var isDark;
+          if (saved === 'dark' || saved === 'light') {
+            isDark = saved === 'dark';
+          } else {
+            isDark =
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
           document.documentElement.classList.toggle('dark', isDark);
         } catch (e) {}
       })();

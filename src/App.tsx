@@ -21,15 +21,32 @@ const AboutView = lazy(() =>
 );
 
 export default function App() {
-  // 1. Theme State (defaults to light as requested in the prompt, with persistent localStorage)
-  const [theme, setTheme] = useState<ThemeMode>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('cartas_que_quedan_theme');
-      if (saved === 'dark' || saved === 'light') return saved;
+  // 1. Theme State
+  // If the user has explicitly chosen a theme we honor it (persisted in
+  // localStorage). Otherwise we follow the browser / OS color-scheme
+  // preference and keep reacting to it live until the user picks one.
+  const THEME_STORAGE_KEY = 'cartas_que_quedan_theme';
+
+  const getSystemTheme = (): ThemeMode => {
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      return 'dark';
     }
     return 'light';
+  };
+
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+    }
+    return getSystemTheme();
   });
 
+  // Apply the current theme to the document root.
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -37,11 +54,29 @@ export default function App() {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('cartas_que_quedan_theme', theme);
   }, [theme]);
 
+  // Follow the OS color-scheme preference live, but only while the user hasn't
+  // made an explicit choice (nothing stored in localStorage).
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'dark' || saved === 'light') return; // user chose manually
+      setTheme(event.matches ? 'dark' : 'light');
+    };
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
+
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setTheme((prev) => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      // Toggling is an explicit choice, so persist it.
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+      return next;
+    });
   };
 
   // 2. Font Size State (defaults to base, persistent in localStorage)
