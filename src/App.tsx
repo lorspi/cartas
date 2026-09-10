@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { HomeView } from './views/HomeView';
-import { ArchiveView } from './views/ArchiveView';
-import { LetterDetailView } from './views/LetterDetailView';
-import { AboutView } from './views/AboutView';
 import { INITIAL_LETTERS } from './data/letters';
 import { Letter, ThemeMode, FontSizeScale, AppView } from './types';
+
+// Views are code-split so each route only downloads what it needs. The letter
+// detail view in particular pulls in the markdown stack (react-markdown,
+// remark-gfm, rehype-raw), which we don't want in the initial bundle.
+const HomeView = lazy(() =>
+  import('./views/HomeView').then((m) => ({ default: m.HomeView })),
+);
+const ArchiveView = lazy(() =>
+  import('./views/ArchiveView').then((m) => ({ default: m.ArchiveView })),
+);
+const LetterDetailView = lazy(() =>
+  import('./views/LetterDetailView').then((m) => ({ default: m.LetterDetailView })),
+);
+const AboutView = lazy(() =>
+  import('./views/AboutView').then((m) => ({ default: m.AboutView })),
+);
 
 export default function App() {
   // 1. Theme State (defaults to light as requested in the prompt, with persistent localStorage)
@@ -49,12 +61,32 @@ export default function App() {
   };
 
   // 3. Routing & Path Management
+  // BASE_URL is the deploy sub-path Vite serves from (e.g. "/cartas/" on
+  // GitHub Pages, "/" on a custom domain). We strip it before matching routes
+  // and prepend it when building links so the app works under any base.
+  const BASE = import.meta.env.BASE_URL || '/';
+
+  const stripBase = (pathname: string): string => {
+    const normalizedBase = BASE.replace(/\/$/, ''); // "/cartas" or ""
+    let route = pathname;
+    if (normalizedBase && route.startsWith(normalizedBase)) {
+      route = route.slice(normalizedBase.length);
+    }
+    if (!route.startsWith('/')) route = `/${route}`;
+    return route;
+  };
+
+  const withBase = (route: string): string => {
+    const normalizedBase = BASE.replace(/\/$/, ''); // "/cartas" or ""
+    return `${normalizedBase}${route}` || '/';
+  };
+
   const parseCurrentPath = (): AppView => {
     if (typeof window === 'undefined') return { type: 'home' };
-    const pathname = window.location.pathname;
+    const pathname = stripBase(window.location.pathname);
 
-    if (pathname.startsWith('/cartas/')) {
-      const slug = pathname.replace('/cartas/', '').replace(/\/$/, '');
+    if (pathname.startsWith('/carta/')) {
+      const slug = pathname.replace('/carta/', '').replace(/\/$/, '');
       if (slug) {
         return { type: 'letter', slug };
       }
@@ -78,10 +110,11 @@ export default function App() {
     if (view.type === 'archive') {
       newPath = view.category ? `/archivo?categoria=${encodeURIComponent(view.category)}` : '/archivo';
     } else if (view.type === 'letter') {
-      newPath = `/cartas/${view.slug}`;
+      newPath = `/carta/${view.slug}`;
     } else if (view.type === 'about') {
       newPath = '/sobre';
     }
+    newPath = withBase(newPath);
 
     if (replace) {
       window.history.replaceState({ view }, '', newPath);
@@ -137,6 +170,19 @@ export default function App() {
 
       {/* Main Content View */}
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8">
+        <Suspense
+          fallback={
+            <div
+              className="flex items-center justify-center py-32 text-[#8c8479] dark:text-[#7d756a]"
+              role="status"
+              aria-live="polite"
+            >
+              <span className="font-serif text-sm tracking-wide animate-pulse">
+                Cargando…
+              </span>
+            </div>
+          }
+        >
         {currentView.type === 'home' && (
           <HomeView
             letters={INITIAL_LETTERS}
@@ -175,6 +221,7 @@ export default function App() {
             onGoToArchive={() => navigate({ type: 'archive' })}
           />
         )}
+        </Suspense>
       </main>
 
       {/* Editorial Footer */}

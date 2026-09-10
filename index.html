@@ -14,6 +14,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..800;1,8..60,300..800&display=swap" rel="stylesheet" />
     <script>
+      // SPA redirect restore for GitHub Pages (pairs with public/404.html).
+      // Decodes the ?/ path the 404 page encoded and rewrites history back to
+      // the real URL before the app boots, so deep links resolve correctly.
+      (function () {
+        var l = window.location;
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })();
+    </script>
+    <script>
       // Apply the saved theme before first paint so the .dark class is
       // authoritative from the start (prevents flash and OS-preference mismatch).
       (function () {

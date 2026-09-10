@@ -5,7 +5,22 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // Served from https://lorspi.github.io/cartas/ (GitHub Pages project site).
+    // Override with VITE_BASE='/' when hosting at a domain root / custom domain.
+    base: process.env.VITE_BASE ?? '/cartas/',
     plugins: [react(), tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          // Split large, stable vendor code into cacheable chunks so the app
+          // shell stays small and the markdown stack loads only with a letter.
+          manualChunks: {
+            react: ['react', 'react-dom'],
+            markdown: ['react-markdown', 'remark-gfm', 'rehype-raw'],
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
