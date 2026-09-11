@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://lorspi.github.io/cartas/favicon.svg" alt="Cartas que quedan" width="96" height="96" />
+  <img src="https://lorspi.github.io/cartas/favicon.png" alt="Cartas que quedan" width="96" height="96" />
 </p>
 
 <h1 align="center">Cartas que quedan</h1>
