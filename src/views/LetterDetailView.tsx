@@ -346,28 +346,60 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
 
   const currentStyles = fontSizeClasses[fontSize];
 
-  const handleShare = async () => {
+  /** Copies the current URL and briefly shows the "Enlace copiado" feedback.
+   *  Uses the async Clipboard API when available and falls back to a legacy
+   *  execCommand approach for older/insecure contexts. */
+  const copyLink = async () => {
+    const url = window.location.href;
     try {
-      if (navigator.share) {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2400);
+    } catch {
+      /* ignore: clipboard permission denied or unsupported */
+    }
+  };
+
+  const handleShare = async () => {
+    // Detect coarse-pointer (touch) devices. On mobile we keep the native
+    // share sheet; on desktop `navigator.share` is unreliable (present but
+    // silently failing on some browsers), so we always copy the link instead.
+    const isMobile =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(pointer: coarse)').matches;
+
+    if (isMobile && typeof navigator.share === 'function') {
+      try {
         await navigator.share({
           title: `${letter.title} — Cartas que quedan`,
           text: letter.excerpt,
           url: window.location.href,
         });
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2400);
+        return;
+      } catch (err) {
+        // User cancelled the share sheet: do nothing. Any other failure falls
+        // through to copying the link so the action is never a dead end.
+        if (err instanceof DOMException && err.name === 'AbortError') return;
       }
-    } catch {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2400);
     }
+
+    await copyLink();
   };
 
   return (
-    <article className="w-full relative pb-28">
+    <article className={`w-full relative pb-28 ${isFocusMode ? 'pt-10 sm:pt-14' : ''}`}>
       {/* Discreet Reading Progress Bar */}
       <ReadingProgress />
 
