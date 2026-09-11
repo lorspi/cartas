@@ -92,8 +92,8 @@ Porque creemos que ya sabemos.
 
 Y aquí encuentro una frase de la Biblia que me parece brutalmente honesta:
 
-<blockquote data-biblical="true" data-ref="1 Corintios 8:2">
-Si alguno se imagina que sabe algo, aún no sabe nada como debe saberlo.
+<blockquote data-biblical="true" data-ref="Santiago 1:19">
+Todo hombre sea pronto para oír, tardo para hablar, tardo para airarse.
 </blockquote>
 
 Qué difícil es aceptar eso.

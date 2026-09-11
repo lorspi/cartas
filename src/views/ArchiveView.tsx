@@ -35,6 +35,21 @@ const bodyToPlainText = (markdown: string): string =>
     .replace(/[#>*_`~]/g, ' ')
     .replace(/\s+/g, ' ');
 
+/**
+ * Collect every biblical reference in a letter's body.
+ * These live in `data-ref="Santiago 1:19"` attributes on <blockquote> tags
+ * and would otherwise be discarded when HTML is stripped for search.
+ */
+const extractReferences = (markdown: string): string => {
+  const refs: string[] = [];
+  const re = /data-ref=["']([^"']+)["']/gi;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(markdown)) !== null) {
+    refs.push(match[1]);
+  }
+  return refs.join(' ');
+};
+
 export const ArchiveView: React.FC<ArchiveViewProps> = ({
   letters,
   initialCategory,
@@ -70,8 +85,20 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
           const matchesCategory = normalize(letter.category).includes(q);
           const matchesTags = letter.tags.some((t) => normalize(t).includes(q));
           const matchesContent = normalize(bodyToPlainText(letter.body)).includes(q);
+          // Biblical references: both the epigraph and the inline `data-ref` citations.
+          const matchesReference =
+            (letter.biblicalQuote?.reference
+              ? normalize(letter.biblicalQuote.reference).includes(q)
+              : false) || normalize(extractReferences(letter.body)).includes(q);
 
-          return matchesTitle || matchesExcerpt || matchesCategory || matchesTags || matchesContent;
+          return (
+            matchesTitle ||
+            matchesExcerpt ||
+            matchesCategory ||
+            matchesTags ||
+            matchesContent ||
+            matchesReference
+          );
         }
 
         return true;
