@@ -24,6 +24,9 @@ const DEPLOY_BRANCH = 'main';
 const DIST_DIR = 'dist';
 // Files that live on `main` but are not produced by the build; keep them.
 const PRESERVE = ['LICENSE', 'CNAME'];
+// Files from the source branch to copy into the deploy branch root even though
+// they are not part of the Vite build output (e.g. README shown on GitHub).
+const INCLUDE_FROM_SOURCE = ['README.md'];
 
 const dryRun = process.argv.includes('--dry-run');
 
@@ -112,6 +115,14 @@ try {
     cpSync(join(DIST_DIR, entry), join(worktreeDir, entry), {
       recursive: true,
     });
+  }
+
+  // Include repo files that aren't part of the build but should live at the
+  // root of the deploy branch (e.g. README shown on GitHub).
+  for (const entry of INCLUDE_FROM_SOURCE) {
+    if (existsSync(entry)) {
+      cpSync(entry, join(worktreeDir, entry), { recursive: true });
+    }
   }
 
   // 4. Commit & push ---------------------------------------------------------
