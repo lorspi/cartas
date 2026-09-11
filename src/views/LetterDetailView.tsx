@@ -4,12 +4,152 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import { ArrowLeft, ArrowRight, Share2, Check, Bookmark } from 'lucide-react';
 import { Letter, ThemeMode, FontSizeScale } from '../types';
+import { Bot, User } from 'lucide-react';
 import { ReadingControls } from '../components/ReadingControls';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { CategoryBadge } from '../components/CategoryBadge';
 import { Quote } from '../components/Quote';
 
 type StyleScale = { p: string; h: string; quote: string };
+
+/** Renders inline markdown (bold, italic, links…) for a single dialogue turn.
+ *  We reuse ReactMarkdown but strip the wrapping <p> so it flows inside a
+ *  chat bubble, and let **bold** inherit the bubble's text colour. */
+function InlineMarkdown({ text }: { text: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        p: ({ children }) => <>{children}</>,
+        strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+        em: ({ children }) => <em className="italic">{children}</em>,
+      }}
+    >
+      {text}
+    </ReactMarkdown>
+  );
+}
+
+/** Renders the example AI/person dialogue inside its own bordered container so
+ *  the reader clearly sees it is an external, illustrative exchange rather than
+ *  part of the author's own prose. Each turn is shown as a labelled chat bubble
+ *  and speakers alternate (person → AI → person …). */
+function AiConversation({ turns, source }: { turns: string[]; source?: string }) {
+  return (
+    <div
+      role="group"
+      aria-label={source ?? 'Conversación de ejemplo'}
+      className="my-12 rounded-lg border border-[#dad4cb] dark:border-[#383633] bg-[#f5f1ec]/70 dark:bg-[#201f1d]/70 shadow-xs overflow-hidden"
+    >
+      {/* Header: makes explicit this is an external example */}
+      <div className="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-[#dad4cb]/70 dark:border-[#383633]/70 bg-[#ece9e4]/80 dark:bg-[#1a1918]/80">
+        <Bot className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b] shrink-0" />
+        <span className="font-sans text-[11px] uppercase tracking-wider text-[#6b645c] dark:text-[#9c958c]">
+          {source ?? 'Conversación de ejemplo'}
+        </span>
+      </div>
+
+      {/* Dialogue turns */}
+      <div className="px-4 sm:px-5 py-5 space-y-4">
+        {turns.map((turn, index) => {
+          // Speakers alternate; the exchange opens with the person.
+          const isAI = index % 2 === 1;
+          return (
+            <div
+              key={index}
+              className={`flex ${isAI ? 'justify-start' : 'justify-end'}`}
+            >
+              {/* On mobile the avatar sits above the bubble (column layout) so
+                  the bubble can stretch nearly full width; from `sm` up it moves
+                  back beside the bubble. */}
+              <div
+                className={`flex flex-col sm:flex-row gap-1.5 sm:gap-2.5 w-[92%] sm:w-auto sm:max-w-[85%] ${
+                  isAI
+                    ? 'items-start sm:flex-row'
+                    : 'items-end sm:flex-row-reverse'
+                }`}
+              >
+                {/* Speaker avatar */}
+                <span
+                  className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full sm:mt-0.5 ${
+                    isAI
+                      ? 'bg-[#b84e2a]/12 text-[#b84e2a] dark:bg-[#cf6e4b]/18 dark:text-[#cf6e4b]'
+                      : 'bg-[#dad4cb]/60 text-[#6b645c] dark:bg-[#383633]/70 dark:text-[#9c958c]'
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isAI ? <Bot className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
+                </span>
+
+                {/* Bubble */}
+                <div
+                  className={`w-full sm:w-auto rounded-2xl px-4 py-2.5 font-sans text-[15px] sm:text-[16px] leading-relaxed ${
+                    isAI
+                      ? 'bg-white dark:bg-[#2a2825] text-[#2b2725] dark:text-[#e4ded6] rounded-tl-sm border border-[#dad4cb]/60 dark:border-[#383633]/60'
+                      : 'bg-[#b84e2a] dark:bg-[#cf6e4b] text-white rounded-tr-sm'
+                  }`}
+                >
+                  <span className="sr-only">
+                    {isAI ? 'Inteligencia artificial: ' : 'Persona: '}
+                  </span>
+                  <InlineMarkdown text={turn} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+type BodySegment =
+  | { kind: 'markdown'; content: string }
+  | { kind: 'conversation'; turns: string[]; source?: string };
+
+/** Splits the raw markdown body into ordered segments so that any
+ *  `<div data-conversation …> … </div>` block is pulled out and rendered by
+ *  {@link AiConversation}, while everything else stays plain markdown. Doing the
+ *  split on the source text (instead of relying on rehype-raw's HTML handling)
+ *  keeps rendering identical in dev and on GitHub Pages. */
+function splitBodyIntoSegments(body: string): BodySegment[] {
+  const openRe = /<div\b[^>]*\bdata-conversation\b[^>]*>/i;
+  const segments: BodySegment[] = [];
+  let rest = body;
+
+  while (true) {
+    const openMatch = rest.match(openRe);
+    if (!openMatch || openMatch.index === undefined) {
+      if (rest.trim()) segments.push({ kind: 'markdown', content: rest });
+      break;
+    }
+
+    const before = rest.slice(0, openMatch.index);
+    if (before.trim()) segments.push({ kind: 'markdown', content: before });
+
+    const afterOpen = rest.slice(openMatch.index + openMatch[0].length);
+    const closeIndex = afterOpen.search(/<\/div>/i);
+    const inner = closeIndex === -1 ? afterOpen : afterOpen.slice(0, closeIndex);
+
+    // Extract the optional source label from the opening tag.
+    const sourceMatch = openMatch[0].match(/data-conversation-source=("|')(.*?)\1/i);
+    const source = sourceMatch ? sourceMatch[2] : undefined;
+
+    // Each dialogue turn is a paragraph that starts with the em dash «—».
+    const turns = inner
+      .split(/\n\s*\n/)
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .map((t) => t.replace(/^—\s*/, '').replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+
+    segments.push({ kind: 'conversation', turns, source });
+
+    rest = closeIndex === -1 ? '' : afterOpen.slice(closeIndex + '</div>'.length);
+  }
+
+  return segments;
+}
 
 /** Reads the first meaningful character of the markdown body, skipping any
  *  leading markdown syntax that wraps inline text (e.g. `**bold**`, `_em_`,
@@ -42,7 +182,10 @@ function isLetter(char: string): boolean {
 
 /** Renders a letter's markdown body, mapping our content conventions
  *  (data-biblical/data-ref blockquotes, `## ` headings, `---` dividers)
- *  onto the same visual language the old structured content blocks used. */
+ *  onto the same visual language the old structured content blocks used.
+ *
+ *  Any `<div data-conversation>` block is lifted out of the markdown stream and
+ *  rendered by {@link AiConversation} in its own styled container. */
 function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
   const paragraphIndex = useRef(0);
   paragraphIndex.current = 0;
@@ -53,75 +196,88 @@ function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
   // from the source text so it behaves identically in dev and on GitHub Pages.
   const bodyStartsWithLetter = isLetter(firstVisibleChar(body));
 
+  const markdownComponents = {
+    p: ({ children }: { children?: React.ReactNode }) => {
+      const isFirstParagraph = paragraphIndex.current === 0;
+      paragraphIndex.current += 1;
+      // Only apply the drop cap on the first paragraph AND only when the
+      // letter's first visible character is an actual letter.
+      const applyDropCap = isFirstParagraph && bodyStartsWithLetter;
+      return (
+        <p
+          className={`${styles.p} ${
+            applyDropCap ? 'drop-cap' : ''
+          } mb-7 text-justify sm:text-left text-[#2b2725] dark:text-[#e4ded6] font-light`}
+        >
+          {children}
+        </p>
+      );
+    },
+    strong: ({ children }: { children?: React.ReactNode }) => (
+      <strong className="font-bold text-[#1a1714] dark:text-[#f4efe8]">
+        {children}
+      </strong>
+    ),
+    em: ({ children }: { children?: React.ReactNode }) => <em className="italic">{children}</em>,
+    mark: ({ children }: { children?: React.ReactNode }) => (
+      <mark className="bg-[#f2d9a0]/60 dark:bg-[#cfa152]/25 text-[#211e1c] dark:text-[#ede7e0] px-1 rounded-xs">
+        {children}
+      </mark>
+    ),
+    h1: ({ children }: { children?: React.ReactNode }) => (
+      <h1
+        className={`font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
+      >
+        {children}
+      </h1>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2
+        className={`font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
+      >
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3
+        className={`font-serif ${styles.quote} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight mt-10 mb-6`}
+      >
+        {children}
+      </h3>
+    ),
+    blockquote: (props: Record<string, unknown> & { children?: React.ReactNode }) => (
+      <Quote
+        text={typeof props.children === 'string' ? props.children.trim() : String(props.children ?? '')}
+        reference={typeof props['data-ref'] === 'string' ? props['data-ref'] : undefined}
+        isBiblical={props['data-biblical'] === true || props['data-biblical'] === 'true'}
+      />
+    ),
+    hr: () => (
+      <div className="my-12 text-center text-[#8c8479] dark:text-[#7d756a] tracking-[0.4em]">
+        * * *
+      </div>
+    ),
+  };
+
+  const segments = splitBodyIntoSegments(body);
+
   return (
-    <ReactMarkdown
-      rehypePlugins={[rehypeRaw]}
-      remarkPlugins={[remarkGfm]}
-      components={{
-        p: ({ children }) => {
-          const isFirstParagraph = paragraphIndex.current === 0;
-          paragraphIndex.current += 1;
-          // Only apply the drop cap on the first paragraph AND only when the
-          // letter's first visible character is an actual letter.
-          const applyDropCap = isFirstParagraph && bodyStartsWithLetter;
-          return (
-            <p
-              className={`${styles.p} ${
-                applyDropCap ? 'drop-cap' : ''
-              } mb-7 text-justify sm:text-left text-[#2b2725] dark:text-[#e4ded6] font-light`}
-            >
-              {children}
-            </p>
-          );
-        },
-        strong: ({ children }) => (
-          <strong className="font-bold text-[#1a1714] dark:text-[#f4efe8]">
-            {children}
-          </strong>
-        ),
-        em: ({ children }) => <em className="italic">{children}</em>,
-        mark: ({ children }) => (
-          <mark className="bg-[#f2d9a0]/60 dark:bg-[#cfa152]/25 text-[#211e1c] dark:text-[#ede7e0] px-1 rounded-xs">
-            {children}
-          </mark>
-        ),
-        h1: ({ children }) => (
-          <h1
-            className={`font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
+    <>
+      {segments.map((segment, index) =>
+        segment.kind === 'conversation' ? (
+          <AiConversation key={index} turns={segment.turns} source={segment.source} />
+        ) : (
+          <ReactMarkdown
+            key={index}
+            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm]}
+            components={markdownComponents}
           >
-            {children}
-          </h1>
-        ),
-        h2: ({ children }) => (
-          <h2
-            className={`font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
-          >
-            {children}
-          </h2>
-        ),
-        h3: ({ children }) => (
-          <h3
-            className={`font-serif ${styles.quote} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight mt-10 mb-6`}
-          >
-            {children}
-          </h3>
-        ),
-        blockquote: (props: Record<string, unknown> & { children?: React.ReactNode }) => (
-          <Quote
-            text={typeof props.children === 'string' ? props.children.trim() : String(props.children ?? '')}
-            reference={typeof props['data-ref'] === 'string' ? props['data-ref'] : undefined}
-            isBiblical={props['data-biblical'] === true || props['data-biblical'] === 'true'}
-          />
-        ),
-        hr: () => (
-          <div className="my-12 text-center text-[#8c8479] dark:text-[#7d756a] tracking-[0.4em]">
-            * * *
-          </div>
-        ),
-      }}
-    >
-      {body}
-    </ReactMarkdown>
+            {segment.content}
+          </ReactMarkdown>
+        )
+      )}
+    </>
   );
 }
 
