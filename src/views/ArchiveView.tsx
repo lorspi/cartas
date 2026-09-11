@@ -15,6 +15,26 @@ interface ArchiveViewProps {
 
 type SortOrder = 'newest' | 'oldest' | 'readingTime';
 
+/** Lowercase + strip diacritics so "empatia" matches "empatía". */
+const normalize = (text: string): string =>
+  text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+/** Turn a letter's markdown body into plain, searchable prose. */
+const bodyToPlainText = (markdown: string): string =>
+  markdown
+    // Drop image references entirely (including resolved asset URLs)
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    // Keep the link text, discard the URL
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Strip HTML tags
+    .replace(/<[^>]+>/g, ' ')
+    // Strip markdown formatting characters
+    .replace(/[#>*_`~]/g, ' ')
+    .replace(/\s+/g, ' ');
+
 export const ArchiveView: React.FC<ArchiveViewProps> = ({
   letters,
   initialCategory,
@@ -41,14 +61,15 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
           if (!matchesCategory) return false;
         }
 
-        // Search query filter: checks title, excerpt, category, tags
+        // Search query filter: checks title, excerpt, category, tags and the
+        // full inner text of the letter (accent-insensitive).
         if (searchQuery.trim()) {
-          const q = searchQuery.toLowerCase().trim();
-          const matchesTitle = letter.title.toLowerCase().includes(q);
-          const matchesExcerpt = letter.excerpt.toLowerCase().includes(q);
-          const matchesCategory = letter.category.toLowerCase().includes(q);
-          const matchesTags = letter.tags.some((t) => t.toLowerCase().includes(q));
-          const matchesContent = letter.body.toLowerCase().includes(q);
+          const q = normalize(searchQuery.trim());
+          const matchesTitle = normalize(letter.title).includes(q);
+          const matchesExcerpt = normalize(letter.excerpt).includes(q);
+          const matchesCategory = normalize(letter.category).includes(q);
+          const matchesTags = letter.tags.some((t) => normalize(t).includes(q));
+          const matchesContent = normalize(bodyToPlainText(letter.body)).includes(q);
 
           return matchesTitle || matchesExcerpt || matchesCategory || matchesTags || matchesContent;
         }
@@ -69,7 +90,19 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
       });
   }, [letters, searchQuery, selectedCategory, sortOrder]);
 
-  const categoryNames = CATEGORIES.map((c) => c.name);
+  // Only show categories that have at least one letter associated with them
+  // (matching by main category, secondary category or tags — same logic as the filter).
+  const categoryNames = useMemo(() => {
+    return CATEGORIES.map((c) => c.name).filter((name) => {
+      const cat = name.toLowerCase();
+      return letters.some(
+        (letter) =>
+          letter.category.toLowerCase() === cat ||
+          letter.secondaryCategory?.toLowerCase().includes(cat) ||
+          letter.tags.some((t) => t.toLowerCase() === cat)
+      );
+    });
+  }, [letters]);
 
   const resetFilters = () => {
     setSearchQuery('');

@@ -163,6 +163,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
               </button>
             );
           })}
+
+          {/* Filler cells so empty spots in the last row blend with the page
+              background instead of showing the grid lines / border. */}
+          {Array.from({
+            length: (3 - (CATEGORIES.length % 3)) % 3,
+          }).map((_, i) => (
+            <div
+              key={`filler-${i}`}
+              aria-hidden="true"
+              className="hidden lg:block bg-[#ece9e4] dark:bg-[#1c1b1b]"
+            />
+          ))}
         </div>
       </section>
 
