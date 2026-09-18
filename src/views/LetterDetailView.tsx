@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -9,6 +9,20 @@ import { ReadingControls } from '../components/ReadingControls';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { CategoryBadge } from '../components/CategoryBadge';
 import { Quote } from '../components/Quote';
+import { TableOfContents } from '../components/TableOfContents';
+import { extractHeadings, slugifyHeading, TocHeading } from '../utils/toc';
+
+/** Flattens a React heading's children back into plain text so we can derive
+ *  the same slug id that {@link extractHeadings} produced for the outline. */
+function nodeToText(node: React.ReactNode): string {
+  if (node === null || node === undefined || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(nodeToText).join('');
+  if (React.isValidElement(node)) {
+    return nodeToText((node.props as { children?: React.ReactNode }).children);
+  }
+  return '';
+}
 
 type StyleScale = { p: string; h: string; quote: string };
 
@@ -186,9 +200,55 @@ function isLetter(char: string): boolean {
  *
  *  Any `<div data-conversation>` block is lifted out of the markdown stream and
  *  rendered by {@link AiConversation} in its own styled container. */
-function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
+function LetterBody({
+  body,
+  styles,
+  headings,
+}: {
+  body: string;
+  styles: StyleScale;
+  headings: TocHeading[];
+}) {
   const paragraphIndex = useRef(0);
   paragraphIndex.current = 0;
+
+  // Map each heading slug to the ordered list of ids the table of contents
+  // uses (a slug maps to more than one id only when the same heading text
+  // repeats in the letter). Computed purely from the precomputed `headings`, so
+  // it never depends on render-time mutation.
+  const idsBySlug = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const h of headings) {
+      const slug = slugifyHeading(h.text);
+      const list = map.get(slug);
+      if (list) list.push(h.id);
+      else map.set(slug, [h.id]);
+    }
+    return map;
+  }, [headings]);
+
+  // Per-render occurrence counter, used ONLY to disambiguate repeated heading
+  // texts. A fresh Map is created on every render pass (including StrictMode's
+  // double render), so the counting is deterministic within a single pass.
+  const occurrenceRef = useRef<Map<string, number>>(new Map());
+  occurrenceRef.current = new Map();
+
+  const resolveHeadingId = (children: React.ReactNode): string => {
+    const text = nodeToText(children).replace(/\s+/g, ' ').trim();
+    const slug = slugifyHeading(text);
+    const ids = idsBySlug.get(slug);
+
+    // No precomputed match (shouldn't happen for real content): use the slug.
+    if (!ids || ids.length === 0) return slug || 'seccion';
+
+    // Unique slug: return its id directly — no counter, fully stable.
+    if (ids.length === 1) return ids[0];
+
+    // Repeated text: pick the next id in order for this slug.
+    const seen = occurrenceRef.current.get(slug) ?? 0;
+    occurrenceRef.current.set(slug, seen + 1);
+    return ids[Math.min(seen, ids.length - 1)];
+  };
 
   // Decide once, from the raw markdown, whether the letter opens with a real
   // letter. If it opens with a symbol (e.g. the dialogue em dash «—»), we skip
@@ -233,14 +293,16 @@ function LetterBody({ body, styles }: { body: string; styles: StyleScale }) {
     ),
     h2: ({ children }: { children?: React.ReactNode }) => (
       <h2
-        className={`font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
+        id={resolveHeadingId(children)}
+        className={`scroll-mt-24 font-serif ${styles.h} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight border-b border-[#dad4cb]/40 dark:border-[#383633]/40 pb-2`}
       >
         {children}
       </h2>
     ),
     h3: ({ children }: { children?: React.ReactNode }) => (
       <h3
-        className={`font-serif ${styles.quote} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight mt-10 mb-6`}
+        id={resolveHeadingId(children)}
+        className={`scroll-mt-24 font-serif ${styles.quote} font-semibold text-[#211e1c] dark:text-[#ede7e0] tracking-tight mt-10 mb-6`}
       >
         {children}
       </h3>
@@ -309,6 +371,10 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   onToggleFocusMode,
 }) => {
   const [copied, setCopied] = useState(false);
+
+  // Section outline derived from the letter's `## / ###` headings. Recomputed
+  // only when the letter changes; shared with the table-of-contents component.
+  const headings = useMemo(() => extractHeadings(letter.body), [letter.body]);
 
   // Scroll to top when letter changes
   useEffect(() => {
@@ -403,6 +469,9 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
       {/* Discreet Reading Progress Bar */}
       <ReadingProgress />
 
+      {/* In-letter section outline (hidden in focus mode for pure reading) */}
+      {!isFocusMode && <TableOfContents headings={headings} title={letter.title} />}
+
       {/* Floating Action Button: reading controls anchored to the bottom-right */}
       <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 pointer-events-none">
         <div className="pointer-events-auto bg-[#ece9e4]/95 dark:bg-[#1c1b1b]/95 p-1 rounded-full shadow-lg ring-1 ring-[#dad4cb]/60 dark:ring-[#383633]/60 backdrop-blur-xs">
@@ -433,7 +502,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
         )}
 
         {/* Letter Header */}
-        <header className="mb-12 sm:mb-16">
+        <header id="letter-top" className="scroll-mt-24 mb-12 sm:mb-16">
           {/* Metadata Row: Index, Category, Year */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-sans pb-4 border-b border-[#dad4cb]/70 dark:border-[#383633]/70">
             <div className="flex items-center gap-3">
@@ -487,7 +556,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
           id="letter-reading-body"
           className="font-serif text-[#211e1c] dark:text-[#ede7e0] font-normal transition-all"
         >
-          <LetterBody body={letter.body} styles={currentStyles} />
+          <LetterBody body={letter.body} styles={currentStyles} headings={headings} />
         </section>
 
         {/* Colophon of the Letter */}
