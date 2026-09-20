@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sun, Moon, BookOpen, Minimize2 } from 'lucide-react';
+import { OfflineIndicator } from './OfflineIndicator';
 import { ThemeMode, FontSizeScale } from '../types';
 
 interface ReadingControlsProps {
@@ -109,6 +110,11 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
           <Moon className="w-3.5 h-3.5 text-[#5d4837]" strokeWidth={1.75} />
         )}
       </button>
+
+      <OfflineIndicator
+        className="p-1.5 rounded-full hover:bg-[#ece9e4] dark:hover:bg-[#2a2927]"
+        side="top"
+      />
 
       <span className="h-3.5 w-px bg-[#dad4cb] dark:bg-[#383633] mx-0.5" />
 

@@ -2,13 +2,56 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+import {VitePWA} from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
+  // Served from https://lorspi.github.io/cartas/ (GitHub Pages project site).
+  // Override with VITE_BASE='/' when hosting at a domain root / custom domain.
+  const base = process.env.VITE_BASE ?? '/cartas/';
+
   return {
-    // Served from https://lorspi.github.io/cartas/ (GitHub Pages project site).
-    // Override with VITE_BASE='/' when hosting at a domain root / custom domain.
-    base: process.env.VITE_BASE ?? '/cartas/',
-    plugins: [react(), tailwindcss()],
+    base,
+    plugins: [
+      react(),
+      tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        // No installable-app manifest — this is only about letting a reader
+        // keep browsing already-visited pages without a connection, not
+        // "Add to Home Screen".
+        manifest: false,
+        workbox: {
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true,
+          // The app shell (JS/CSS/fonts/images) — every letter's text is
+          // bundled into these at build time, so precaching them is enough
+          // to read any letter offline. `ping.txt` is deliberately left out
+          // so it can be used as a real-network reachability probe.
+          globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
+          // Any client-side route (e.g. /carta/<slug> after a hard refresh)
+          // falls back to the shell, which then renders the right letter
+          // from the already-bundled content.
+          navigateFallback: `${base}index.html`,
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {cacheName: 'google-fonts-stylesheets'},
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-webfonts',
+                expiration: {maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365},
+                cacheableResponse: {statuses: [0, 200]},
+              },
+            },
+          ],
+        },
+      }),
+    ],
     build: {
       rollupOptions: {
         output: {

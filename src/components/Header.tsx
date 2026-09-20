@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { OfflineIndicator } from './OfflineIndicator';
 import { ThemeMode, AppView } from '../types';
 
 interface HeaderProps {
@@ -83,12 +84,14 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="h-4 w-px bg-[#dad4cb] dark:bg-[#383633]" />
 
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+          <OfflineIndicator className="p-2 rounded-sm hover:bg-[#ece9e4]/60 dark:hover:bg-[#2a2927]" />
         </nav>
 
         {/* Mobile Actions */}
         <div className="flex items-center gap-2 md:hidden">
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-          
+          <OfflineIndicator className="p-2 rounded-sm hover:bg-[#ece9e4]/60 dark:hover:bg-[#2a2927]" />
+
           <button
             id="mobile-menu-toggle"
             type="button"
