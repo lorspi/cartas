@@ -11,6 +11,7 @@ import { CategoryBadge } from '../components/CategoryBadge';
 import { Quote } from '../components/Quote';
 import { TableOfContents } from '../components/TableOfContents';
 import { extractHeadings, slugifyHeading, TocHeading } from '../utils/toc';
+import { beginLetterSession, READING_COMPLETE_THRESHOLD } from '../utils/readingProgress';
 
 /** Flattens a React heading's children back into plain text so we can derive
  *  the same slug id that {@link extractHeadings} produced for the outline. */
@@ -376,10 +377,32 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   // only when the letter changes; shared with the table-of-contents component.
   const headings = useMemo(() => extractHeadings(letter.body), [letter.body]);
 
-  // Scroll to top when letter changes
+  // Starting point for this reading session. A letter already marked fully
+  // read resets to 0 here (once per slug) so re-reading it tracks the new
+  // pass instead of staying stuck showing "Leída" everywhere.
+  const initialProgress = useMemo(() => beginLetterSession(letter.slug), [letter.slug]);
+
+  // "Seguir leyendo": resume roughly where the reader left off in this letter
+  // instead of always jumping to the top. Skipped for letters barely started
+  // or already finished, where starting from the top makes more sense.
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [letter.slug]);
+    const shouldResume = initialProgress > 3 && initialProgress < READING_COMPLETE_THRESHOLD;
+
+    if (!shouldResume) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+
+    // Wait for the new letter's content to lay out so scrollHeight reflects
+    // this letter, not whatever was previously on screen.
+    const frame = requestAnimationFrame(() => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        window.scrollTo({ top: (initialProgress / 100) * totalHeight, behavior: 'instant' });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [letter.slug, initialProgress]);
 
   // Find previous and next letters in chronological/archive order
   const currentIndex = allLetters.findIndex((l) => l.slug === letter.slug);
@@ -467,7 +490,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   return (
     <article className={`w-full relative pb-28 ${isFocusMode ? 'pt-10 sm:pt-14' : ''}`}>
       {/* Discreet Reading Progress Bar */}
-      <ReadingProgress />
+      <ReadingProgress slug={letter.slug} initialProgress={initialProgress} />
 
       {/* In-letter section outline (hidden in focus mode for pure reading) */}
       {!isFocusMode && <TableOfContents headings={headings} title={letter.title} />}

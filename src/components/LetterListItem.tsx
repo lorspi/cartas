@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Clock, ArrowUpRight } from 'lucide-react';
 import { Letter } from '../types';
 import { CategoryBadge } from './CategoryBadge';
+import { LetterProgressBar } from './LetterProgressBar';
+import { getReadingProgress } from '../utils/readingProgress';
 
 interface LetterListItemProps {
   letter: Letter;
@@ -16,6 +18,10 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
   onSelectCategory,
   showExcerpt = true,
 }) => {
+  // Read once on mount: the list unmounts/remounts on every route change in
+  // this SPA, so there's no need to react to storage updates while mounted.
+  const [progress] = useState(() => getReadingProgress(letter.slug));
+
   return (
     <article
       id={`letter-item-${letter.slug}`}
@@ -70,6 +76,9 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
           <span>·</span>
           <span>{letter.formattedDate}</span>
         </div>
+
+        {/* Reading progress: same signal as the bar shown inside the letter */}
+        <LetterProgressBar progress={progress} />
       </div>
     </article>
   );
