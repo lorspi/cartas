@@ -11,6 +11,14 @@ interface TableOfContentsProps {
 /** DOM id of the letter header, used as the "top" anchor for the title entry. */
 const TOP_ID = 'letter-top';
 
+/** DOM id of the site footer, used to know when the pinned outline is about to
+ *  overlap it so we can slide the outline up along with the page. */
+const FOOTER_ID = 'main-footer';
+
+/** Distance (px) kept between the bottom of the pinned outline and the top of
+ *  the footer once they meet, so the outline never touches the footer. */
+const FOOTER_GAP = 24;
+
 /** Vertical offset (px) applied when jumping to a section, so the heading
  *  lands a little below the top edge instead of flush against it. Matches the
  *  `scroll-mt` used on the headings themselves. */
@@ -114,6 +122,73 @@ function useActiveHeading(headings: TocHeading[]): string | null {
   return activeId;
 }
 
+/** Keeps the pinned (xl+) outline from overlapping the footer. The outline is
+ *  `position: fixed` at a set distance from the top of the viewport, so on its
+ *  own it would happily float on top of the footer at the end of the page.
+ *
+ *  This measures how far the footer has risen into the viewport and, once it
+ *  would cross the outline's bottom edge, returns the number of pixels to shift
+ *  the outline upward (as a negative `translateY`). The effect is that the
+ *  outline stays pinned while reading, then slides up together with the footer
+ *  instead of sitting over it. */
+function useFooterAwareOffset(navRef: React.RefObject<HTMLElement | null>): number {
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const compute = () => {
+      frame = 0;
+      const nav = navRef.current;
+      const footer = document.getElementById(FOOTER_ID);
+      if (!nav || !footer) {
+        setOffset((prev) => (prev === 0 ? prev : 0));
+        return;
+      }
+
+      // Viewport top of the footer, and the outline's *pinned* bottom edge —
+      // i.e. its current bottom minus whatever translateY we've already applied,
+      // so the measurement reflects the untransformed (pinned) position.
+      const currentTranslate = getTranslateY(nav);
+      const pinnedBottom = nav.getBoundingClientRect().bottom - currentTranslate;
+      const footerTop = footer.getBoundingClientRect().top;
+
+      // Overlap (or imminent overlap) between the outline and the footer.
+      const overlap = pinnedBottom + FOOTER_GAP - footerTop;
+      const next = overlap > 0 ? -overlap : 0;
+
+      setOffset((prev) => (Math.abs(prev - next) < 0.5 ? prev : next));
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(compute);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    compute();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [navRef]);
+
+  return offset;
+}
+
+/** Reads the current translateY (px) applied to an element via inline
+ *  transform, so we can subtract it and recover the element's unshifted
+ *  position. Returns 0 when there is no vertical translate. */
+function getTranslateY(el: HTMLElement): number {
+  const t = el.style.transform;
+  if (!t) return 0;
+  const match = t.match(/translateY\((-?[\d.]+)px\)/);
+  return match ? parseFloat(match[1]) : 0;
+}
+
 /**
  * In-letter table of contents. On very wide screens it stays pinned to the side
  * as a quiet outline; otherwise it collapses into a floating button that opens
@@ -138,6 +213,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
 
   const activeId = useActiveHeading(entries);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Ref + offset that keep the pinned (xl+) outline from overlapping the footer.
+  const navRef = React.useRef<HTMLElement | null>(null);
+  const footerOffset = useFooterAwareOffset(navRef);
 
   const handleSelect = useCallback((id: string) => {
     scrollToHeading(id);
@@ -179,8 +258,12 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
           the right of the centred 720px reading column, so it never overlaps
           the prose. Shown only where there's room for it. */}
       <nav
+        ref={navRef}
         aria-label="Índice de la carta"
-        className="hidden xl:block fixed top-28 left-[calc(50%+384px)] w-[min(15rem,calc(50%-384px-1rem))] max-h-[70vh] overflow-y-auto z-30"
+        style={{
+          transform: footerOffset ? `translateY(${footerOffset}px)` : undefined,
+        }}
+        className="hidden xl:block fixed top-28 left-[calc(50%+384px)] w-[min(15rem,calc(50%-384px-1rem))] max-h-[70vh] overflow-y-auto z-30 will-change-transform"
       >
         <p className="font-sans text-[10px] uppercase tracking-[0.18em] text-[#8c8479] dark:text-[#7d756a] mb-3 pl-3">
           En esta carta

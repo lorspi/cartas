@@ -24,7 +24,12 @@ export const ReadingProgress: React.FC<ReadingProgressProps> = ({ slug, initialP
       }
       const currentScroll = window.scrollY;
       const percentage = Math.min(100, Math.max(0, (currentScroll / totalHeight) * 100));
-      setProgress((prev) => Math.max(prev, percentage));
+      // The visible bar mirrors the current scroll position, so it advances
+      // when scrolling down and recedes when scrolling back up.
+      setProgress(percentage);
+      // Persist the reader's current position (moves both ways) so reopening
+      // the letter resumes exactly where they left off. A one-time "completed"
+      // flag is kept internally so the "Leída" badge survives scrolling back up.
       setReadingProgress(slug, percentage);
     };
 
