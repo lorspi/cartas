@@ -20,35 +20,17 @@ export default defineConfig(() => {
         // keep browsing already-visited pages without a connection, not
         // "Add to Home Screen".
         manifest: false,
-        workbox: {
-          cleanupOutdatedCaches: true,
-          clientsClaim: true,
-          skipWaiting: true,
+        // Custom service worker (src/sw.ts) so pages can be network-first:
+        // a normal reload must always show freshly deployed letters.
+        strategies: 'injectManifest',
+        srcDir: 'src',
+        filename: 'sw.ts',
+        injectManifest: {
           // The app shell (JS/CSS/fonts/images) — every letter's text is
           // bundled into these at build time, so precaching them is enough
           // to read any letter offline. `ping.txt` is deliberately left out
           // so it can be used as a real-network reachability probe.
           globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
-          // Any client-side route (e.g. /carta/<slug> after a hard refresh)
-          // falls back to the shell, which then renders the right letter
-          // from the already-bundled content.
-          navigateFallback: `${base}index.html`,
-          runtimeCaching: [
-            {
-              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {cacheName: 'google-fonts-stylesheets'},
-            },
-            {
-              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'google-fonts-webfonts',
-                expiration: {maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365},
-                cacheableResponse: {statuses: [0, 200]},
-              },
-            },
-          ],
         },
       }),
     ],
