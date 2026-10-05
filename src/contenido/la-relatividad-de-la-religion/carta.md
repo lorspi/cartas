@@ -103,6 +103,10 @@ No estoy afirmando que haya ocurrido.
 
 Si Jesús tuvo una vida sexual, eso no convertiría automáticamente sus enseñanzas en falsas. Si alguna vez se equivocó, tampoco significa que todo lo que enseñó pierda valor. Y si alguna vez hirió a alguien, pudo haber aprendido de ello.
 
+Tal vez tu problema es que considerás que alguien que puede sangrar, que puede equivocarse y que tiene tus mismos deseos no te puede enseñar nada. Porque tenés esa necesidad de que solo podés aprender de un ser divino y perfecto.
+
+**Y ahí te veo mal porque esto de da la excusa de rechazar las enseñanzas de tu prójimo y excusarte en un libro antiguo para sentir superioridad moral.**
+
 De hecho, podemos entender algo importante desde ahí:
 
 **Tener necesidades humanas, cometer errores o sentir deseos no convierte a una persona en alguien malo.**
