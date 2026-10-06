@@ -111,7 +111,7 @@ De hecho, podemos entender algo importante desde ahí:
 
 **Tener necesidades humanas, cometer errores o sentir deseos no convierte a una persona en alguien malo.**
 
-Vos podés culiar y ser una buena persona.
+Vos podés culiar y eso no te hace impuro ni menos sabio. No te hace menos digno de ser escuchado y enseñar.
 
 Podés equivocarte, hacerle daño a alguien, reconocerlo, aprender de ello y convertirte en una persona mejor.
 
