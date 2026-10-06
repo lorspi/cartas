@@ -1,4 +1,4 @@
-import{j as e}from"./markdown-vbR1zjGP.js";import{A as r}from"./arrow-left--iQbD_Fu.js";import{c as t}from"./index-DBNf3LuV.js";import"./react-C46pKI1t.js";/**
+import{j as e}from"./markdown-vbR1zjGP.js";import{A as r}from"./arrow-left-BkGAglhA.js";import{c as t}from"./index-C8UaRHUw.js";import"./react-C46pKI1t.js";/**
  * @license lucide-react v0.546.0 - ISC
  *
  * This source code is licensed under the ISC license.
