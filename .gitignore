@@ -10,3 +10,4 @@ notas.md
 instrucciones.md
 .kiro/hooks/credit-ledger.kiro.hook
 .kiro/hooks/credit-prompt-snapshot.kiro.hook
+.audio-cache/
