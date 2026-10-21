@@ -1,5 +1,5 @@
 ---
-title: "El Diablo Es Humano"
+title: "El Diablo es Humano"
 category: "Fe"
 secondaryCategory: "Libertad · Sociedad"
 tags: "Fe, Religión, Jesús, Sexualidad, Culpa, Libros apócrifos, Libertad, Colombia"
@@ -10,8 +10,6 @@ biblicalQuote: "Y crió Dios al hombre a su imagen, a imagen de Dios lo crió; v
 biblicalReference: "Génesis 1:27"
 biblicalContext: "El relato de la creación presenta al ser humano como imagen de Dios, antes de que aparezca la historia de su desobediencia y expulsión del jardín del Edén."
 ---
-
-# El Diablo Es Humano
 
 Hay una canción de Aurora que se llama *The Devil Is Human* y que me dejó pensando en una pregunta que llevo tiempo haciéndome: ¿en qué momento empezamos a sentir vergüenza de ser seres humanos?
 
