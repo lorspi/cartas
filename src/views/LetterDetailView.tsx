@@ -9,6 +9,7 @@ import { ReadingControls } from '../components/ReadingControls';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { CategoryBadge } from '../components/CategoryBadge';
 import { Quote } from '../components/Quote';
+import { AudioPlayer } from '../components/AudioPlayer';
 import { TableOfContents } from '../components/TableOfContents';
 import { extractHeadings, slugifyHeading, TocHeading } from '../utils/toc';
 import { beginLetterSession, READING_COMPLETE_THRESHOLD } from '../utils/readingProgress';
@@ -573,6 +574,10 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
             </div>
           )}
         </header>
+
+        {/* Narrated version (only when public/audio/<slug>.json exists). Lives
+            outside the header so it can stay sticky through the whole letter. */}
+        <AudioPlayer slug={letter.slug} title={letter.title} isFocusMode={isFocusMode} />
 
         {/* Letter Body Content */}
         <section

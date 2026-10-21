@@ -61,6 +61,17 @@
   color: var(--text-ink);
 }
 
+/* Sentence being narrated (CSS Custom Highlight API, set by AudioPlayer) */
+::highlight(carta-lectura) {
+  background-color: rgb(242 217 160 / 0.7);
+  color: #211e1c;
+}
+
+.dark ::highlight(carta-lectura) {
+  background-color: rgb(207 161 82 / 0.3);
+  color: #f4efe8;
+}
+
 /* Editorial line-clamp */
 .line-clamp-2 {
   display: -webkit-box;
