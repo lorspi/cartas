@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/HomeView-CgRvxfMg.js","assets/markdown-vbR1zjGP.js","assets/LetterList-C2o-lQuT.js","assets/readingProgress-PCN79Sx_.js","assets/arrow-right-BAWMhmfy.js","assets/react-C46pKI1t.js","assets/ArchiveView-QYTAmG_C.js","assets/rotate-ccw-CgGyTsqd.js","assets/LetterDetailView-B_Fpdj5F.js","assets/arrow-left-DytHbJYx.js","assets/AboutView-CfyyBMug.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/HomeView-c2A74lX-.js","assets/markdown-vbR1zjGP.js","assets/LetterList-CO6S9Hc8.js","assets/readingProgress-C06MaQqM.js","assets/arrow-right-BoKH6onE.js","assets/react-C46pKI1t.js","assets/ArchiveView-DY4upIoW.js","assets/rotate-ccw-Bj8yxQ5b.js","assets/LetterDetailView-CbXA_IBW.js","assets/arrow-left-BfwZwtXt.js","assets/AboutView-B9Hx-o2Q.js"])))=>i.map(i=>d[i]);
 import{r as $b,a as te,j}from"./markdown-vbR1zjGP.js";import{r as Pb}from"./react-C46pKI1t.js";(function(){const T=document.createElement("link").relList;if(T&&T.supports&&T.supports("modulepreload"))return;for(const E of document.querySelectorAll('link[rel="modulepreload"]'))p(E);new MutationObserver(E=>{for(const z of E)if(z.type==="childList")for(const C of z.addedNodes)C.tagName==="LINK"&&C.rel==="modulepreload"&&p(C)}).observe(document,{childList:!0,subtree:!0});function x(E){const z={};return E.integrity&&(z.integrity=E.integrity),E.referrerPolicy&&(z.referrerPolicy=E.referrerPolicy),E.crossOrigin==="use-credentials"?z.credentials="include":E.crossOrigin==="anonymous"?z.credentials="omit":z.credentials="same-origin",z}function p(E){if(E.ep)return;E.ep=!0;const z=x(E);fetch(E.href,z)}})();var bs={exports:{}},Pt={},gs={exports:{}},hs={};/**
  * @license React
  * scheduler.production.js
@@ -1229,322 +1229,322 @@ Pero yo sí necesitaba llegar hasta acá.\r
 Y si algo de lo que escribí te molestó, ojalá no te quedés solamente con la molestia.\r
 \r
 **Ojalá te haga pensar.**\r
-`,Cg=`---
-title: "Si matamos a todos los malos, ¿quedan los buenos?"
-category: "Guerra"
-secondaryCategory: "Paz · Sociedad"
-tags: "Guerra, Paz, Jesús, Colombia, Justicia, Perdón, Enemigos"
-excerpt: "Una conversación entre un padre y su hijo abre una pregunta enorme sobre la violencia en Colombia: ¿podemos vencer el mal sin convertirnos en aquello que combatimos?"
-date: "2026-09-10"
-readingTime: "9 min de lectura"
-biblicalQuote: "Vuelve tu espada a su lugar; porque todos los que tomen espada, a espada perecerán."
-biblicalReference: "Mateo 26:52"
-biblicalContext: "En el huerto de Getsemaní, cuando uno de sus discípulos intenta defender a Jesús con una espada."
----
-
-—Papá, si matamos a todos los malos, ¿solo quedamos los buenos?
-
-—No, hijo. Solo quedaríamos los asesinos.
-
-Creo que esa pequeña conversación contiene una pregunta enorme.
-
-Porque cuando hablamos de guerra solemos dividir el mundo de una manera muy sencilla: **ellos son los malos y nosotros somos los buenos** .
-
-Y cuando hacemos esa división, matar al otro empieza a parecernos justificable.
-
-Si ellos matan, nosotros tenemos derecho a matar.
-
-Si ellos son violentos, nosotros tenemos derecho a ser más violentos.
-
-Si ellos hacen el mal, nosotros podemos hacerles algo todavía peor porque, supuestamente, lo hacemos por una causa justa.
-
-Pero ahí aparece una pregunta incómoda:
-
-## ¿En qué momento combatir el mal empieza a convertirnos en aquello que decimos combatir?
-
-El papa León XIV lo expresó recientemente de una manera muy fuerte en la Sagrada Familia:
-
-<blockquote>“No se puede creer en Jesús y al mismo tiempo promover la guerra o matar a inocentes”</blockquote>
-
-Y esto no debería sorprendernos, porque Jesús fue incluso más radical.
-
-En Mateo 26:52 , cuando uno de sus discípulos intenta defenderlo con una espada, Jesús le dice:
-
-<blockquote>“Vuelve tu espada a su lugar; porque todos los que tomen espada, a espada perecerán.”</blockquote>
-
-Jesús no está diciendo que el mal no exista.
-
-No está diciendo que debamos ser indiferentes frente a la injusticia.
-
-Está diciendo algo mucho más difícil:
-
-**Que no podemos construir el bien utilizando exactamente las mismas herramientas del mal.**
-
-Y quizás por eso, cuando Jesús habla de nuestros enemigos, no dice:
-
-<blockquote>“Destrúyelos”.</blockquote>
-
-Dice:
-
-<blockquote>“Amad a vuestros enemigos, haced bien a los que os aborrecen.”</blockquote>
-
-Y en Mateo llega todavía más lejos:
-
-<blockquote>“Amad a vuestros enemigos y orad por quienes os persiguen.”</blockquote>
-
-Esto puede parecernos ingenuo.
-
-¿Cómo vamos a amar a alguien que nos quiere hacer daño?
-
-Pero quizá Jesús no está hablando de sentir cariño por nuestro enemigo.
-
-Está hablando de negarnos a convertirnos en enemigos nosotros también.
-
-Porque es muy fácil amar a quien nos ama.
-
-Lo difícil es romper la cadena.
-
-## Y aquí quiero traer esto a Colombia
-
-Colombia sabe perfectamente lo que ocurre cuando una sociedad decide que la violencia es el camino para solucionar sus problemas.
-
-No estamos hablando de una posibilidad hipotética.
-
-**Ya estuvimos allí.**
-
-El informe ¡Basta Ya! del Centro Nacional de Memoria Histórica estimó que entre 1958 y 2012 aproximadamente **220.000 personas murieron como consecuencia del conflicto armado colombiano** .
-
-Y hay un dato todavía más doloroso:
-
-**el 81 % de esas víctimas eran civiles.**
-
-No eran los grandes responsables de la guerra.
-
-Eran personas comunes.
-
-Padres.
-
-Madres.
-
-Hijos.
-
-Campesinos.
-
-Personas que simplemente estaban viviendo en el lugar equivocado cuando otros decidieron que la violencia era la solución.
-
-La Comisión de la Verdad posteriormente estimó que entre 1985 y 2018 **450.664 personas perdieron la vida a causa del conflicto armado** , y advierte que, considerando el subregistro, el universo podría llegar a unas 800.000 víctimas.
-
-Entonces deberíamos preguntarnos:
-
-**¿Qué nos dejó tanta violencia?**
-
-¿Nos dejó paz?
-
-¿Nos dejó un país sin enemigos?
-
-¿Nos convirtió finalmente en “los buenos”?
-
-No.
-
-Nos dejó generaciones enteras marcadas por el miedo, el desplazamiento, las desapariciones, las masacres y el dolor.
-
-Porque la violencia tiene algo terrible:
-
-**rara vez termina donde comenzó.**
-
-Una persona mata a otra.
-
-La familia de esa persona busca venganza.
-
-La otra familia responde.
-
-Aparece otro grupo.
-
-Después otro.
-
-Y cada generación hereda una nueva razón para odiar.
-
-La sangre derramada se convierte en argumento para derramar más sangre.
-
-Y así, la violencia se convierte en una cadena.
-
-## Por eso me preocupa cuando empezamos a celebrar la muerte
-
-No importa si quien murió pertenecía a una guerrilla, a una banda criminal, a un grupo paramilitar o a cualquier otra organización.
-
-Podemos condenar sus actos.
-
-Podemos exigir justicia.
-
-Podemos pedir que quienes hacen daño sean detenidos y juzgados.
-
-Pero hay una diferencia enorme entre **hacer justicia y celebrar la muerte** .
-
-Porque cuando empezamos a mirar un cadáver y sentir satisfacción, algo dentro de nosotros también empieza a morir.
-
-Y creo que eso es especialmente delicado cuando viene desde quienes tienen el poder.
-
-Un ciudadano puede sentir rabia.
-
-Puede incluso pedir venganza.
-
-Pero un jefe de Estado tiene una responsabilidad diferente.
-
-Tiene el poder de las armas, de las instituciones y de la fuerza pública.
-
-Por eso deberíamos exigirle algo más que fuerza.
-
-**Deberíamos exigirle sabiduría.**
-
-No solamente que pueda derrotar a un enemigo, sino que pueda evitar crear diez enemigos nuevos.
-
-No solamente que pueda ganar una batalla, sino que pueda construir una paz que sobreviva a su gobierno.
-
-Porque exhibir cuerpos, convertir la muerte en espectáculo o presentar la eliminación del enemigo como una victoria moral puede hacer que olvidemos algo fundamental:
-
-**el muerto también fue un ser humano.**
-
-Y si somos cristianos, eso debería importarnos.
-
-Incluso cuando ese ser humano hizo cosas terribles.
-
-## Jesús no nos enseñó a preguntar quién merece nuestro amor
-
-Jesús hizo algo mucho más incómodo.
-
-Nos pidió amar precisamente a quienes creemos que no lo merecen.
-
-Porque ahí está la diferencia entre la justicia humana y el mensaje de Jesús.
-
-La lógica humana dice:
-
-<blockquote>“Me hiciste daño, entonces te devuelvo el daño.”</blockquote>
-
-Jesús dice:
-
-<blockquote>“No devuelvas mal por mal.”</blockquote>
-
-La lógica humana dice:
-
-<blockquote>“Si quieres paz, tienes que destruir a tus enemigos.”</blockquote>
-
-Jesús dice:
-
-<blockquote>“Bienaventurados los que trabajan por la paz.”</blockquote>
-
-La lógica humana dice:
-
-<blockquote>“Vence al enemigo.”</blockquote>
-
-Jesús dice:
-
-<blockquote>“Vence el mal con el bien.”</blockquote>
-
-Y quizás esta última frase sea la que más deberíamos llevarnos hoy.
-
-Porque Jesús no dice:
-
-<blockquote>“vence al malo.”</blockquote>
-
-Dice:
-
-<blockquote>“vence al mal.”</blockquote>
-
-Hay una diferencia enorme.
-
-Si nuestro objetivo es destruir personas, siempre tendremos un enemigo nuevo que destruir.
-
-Pero si nuestro objetivo es destruir el mal, entonces tenemos que preguntarnos cómo acabar con las condiciones que producen violencia, pobreza, exclusión, odio, corrupción, narcotráfico, fanatismo y desesperanza.
-
-Eso es mucho más difícil que disparar.
-
-Pero también es mucho más parecido a Jesús.
-
-## Y esto también nos toca a nosotros
-
-Es fácil escuchar todo esto y pensar:
-
-“Esto es para el presidente.”
-
-Pero no.
-
-También es para nosotros.
-
-Porque la guerra no empieza necesariamente con un fusil.
-
-A veces empieza en una conversación.
-
-Empieza cuando dejamos de ver al otro como persona.
-
-Cuando decimos:
-
-“Es un hijueputa.”
-
-“Es un guerrillero.”
-
-“Es un paraco.”
-
-“Es un comunista.”
-
-“Es un uribista.”
-
-“Es un petrista.”
-
-“Es un criminal.”
-
-“Es de los otros.”
-
-Y poco a poco dejamos de ver a una persona y empezamos a ver una etiqueta.
-
-Y cuando dejamos de ver personas, resulta mucho más fácil justificar que sufran.
-
-Por eso la pregunta del principio vuelve a aparecer:
-
-—Papá, si matamos a todos los malos, ¿solo quedan los buenos?
-
-—No hijo. **Solo quedaríamos los asesinos.**
-
-Porque el verdadero triunfo de la violencia no ocurre solamente cuando alguien muere.
-
-Ocurre cuando consigue convencernos de que matar al otro nos hace mejores.
-
-Y Jesús nos propone exactamente lo contrario.
-
-No vencer al odio con más odio.
-
-No vencer la violencia con más violencia.
-
-No convertirnos en aquello que combatimos.
-
-Sino algo muchísimo más difícil:
-
-**vencer el mal con el bien.**
-
-Quizás esa sea la verdadera paz que Colombia todavía está aprendiendo a construir.
-
-## Reflexión para responder internamente
-
-Para vos que estás leyendo esto y decidiste votar por una opción que propone la guerra como camino para recuperar la seguridad, quisiera dejarte una pregunta, no para que me la respondas a mí, sino para que te la respondas a vos mismo:
-
-**Si durante más de seis décadas Colombia ha intentado resolver la violencia mediante más violencia, y ese camino nos ha dejado cientos de miles de muertos, desplazados, desaparecidos y familias destruidas, ¿qué te hace pensar que esta vez el resultado será diferente?**
-
-Si la fórmula de **matar al enemigo para alcanzar la paz** no nos ha dado paz en más de 66 años de conflicto, ¿por qué crees que volver a utilizarla ahora sí va a funcionar?
-
-Jesús nos dejó una advertencia hace más de dos mil años:
-
-<blockquote>“Todos los que tomen espada, a espada perecerán.”</blockquote>
-
-Quizás, como seguidores de Jesús, deberíamos preguntarnos:
-
-**¿Cómo rompemos el ciclo que convierte a cada enemigo derrotado en el origen de un nuevo enemigo?**
-
-**Cada uno de esos cuerpos expuestos por el presidente eran padres, hijos, esposos, amigos. Cada uno de ellos tenía personas que los amaban y que, en este momento, están cargadas de rencor. La muerte de cada guerrillero creará varios guerrilleros más.**
-
-Colombia ya conoce el camino de la guerra.
-
-**Lo que todavía necesitamos aprender es el camino de la paz: aquel en el que cada guerrillero reinsertado a la sociedad es un guerrillero menos en la guerra y una persona más contribuyendo a construir la paz.**
-
-Siempre nos han inculcado que ser un buen católico o cristiano consiste en amar a Jesús. Pero poco se habla de que también consiste en **amar a Judas.**
+`,Cg=`---\r
+title: "Si matamos a todos los malos, ¿quedan los buenos?"\r
+category: "Guerra"\r
+secondaryCategory: "Paz · Sociedad"\r
+tags: "Guerra, Paz, Jesús, Colombia, Justicia, Perdón, Enemigos"\r
+excerpt: "Una conversación entre un padre y su hijo abre una pregunta enorme sobre la violencia en Colombia: ¿podemos vencer el mal sin convertirnos en aquello que combatimos?"\r
+date: "2026-09-10"\r
+readingTime: "9 min de lectura"\r
+biblicalQuote: "Vuelve tu espada a su lugar; porque todos los que tomen espada, a espada perecerán."\r
+biblicalReference: "Mateo 26:52"\r
+biblicalContext: "En el huerto de Getsemaní, cuando uno de sus discípulos intenta defender a Jesús con una espada."\r
+---\r
+\r
+—Papá, si matamos a todos los malos, ¿solo quedamos los buenos?\r
+\r
+—No, hijo. Solo quedaríamos los asesinos.\r
+\r
+Creo que esa pequeña conversación contiene una pregunta enorme.\r
+\r
+Porque cuando hablamos de guerra solemos dividir el mundo de una manera muy sencilla: **ellos son los malos y nosotros somos los buenos** .\r
+\r
+Y cuando hacemos esa división, matar al otro empieza a parecernos justificable.\r
+\r
+Si ellos matan, nosotros tenemos derecho a matar.\r
+\r
+Si ellos son violentos, nosotros tenemos derecho a ser más violentos.\r
+\r
+Si ellos hacen el mal, nosotros podemos hacerles algo todavía peor porque, supuestamente, lo hacemos por una causa justa.\r
+\r
+Pero ahí aparece una pregunta incómoda:\r
+\r
+## ¿En qué momento combatir el mal empieza a convertirnos en aquello que decimos combatir?\r
+\r
+El papa León XIV lo expresó recientemente de una manera muy fuerte en la Sagrada Familia:\r
+\r
+<blockquote>“No se puede creer en Jesús y al mismo tiempo promover la guerra o matar a inocentes”</blockquote>\r
+\r
+Y esto no debería sorprendernos, porque Jesús fue incluso más radical.\r
+\r
+En Mateo 26:52 , cuando uno de sus discípulos intenta defenderlo con una espada, Jesús le dice:\r
+\r
+<blockquote>“Vuelve tu espada a su lugar; porque todos los que tomen espada, a espada perecerán.”</blockquote>\r
+\r
+Jesús no está diciendo que el mal no exista.\r
+\r
+No está diciendo que debamos ser indiferentes frente a la injusticia.\r
+\r
+Está diciendo algo mucho más difícil:\r
+\r
+**Que no podemos construir el bien utilizando exactamente las mismas herramientas del mal.**\r
+\r
+Y quizás por eso, cuando Jesús habla de nuestros enemigos, no dice:\r
+\r
+<blockquote>“Destrúyelos”.</blockquote>\r
+\r
+Dice:\r
+\r
+<blockquote>“Amad a vuestros enemigos, haced bien a los que os aborrecen.”</blockquote>\r
+\r
+Y en Mateo llega todavía más lejos:\r
+\r
+<blockquote>“Amad a vuestros enemigos y orad por quienes os persiguen.”</blockquote>\r
+\r
+Esto puede parecernos ingenuo.\r
+\r
+¿Cómo vamos a amar a alguien que nos quiere hacer daño?\r
+\r
+Pero quizá Jesús no está hablando de sentir cariño por nuestro enemigo.\r
+\r
+Está hablando de negarnos a convertirnos en enemigos nosotros también.\r
+\r
+Porque es muy fácil amar a quien nos ama.\r
+\r
+Lo difícil es romper la cadena.\r
+\r
+## Y aquí quiero traer esto a Colombia\r
+\r
+Colombia sabe perfectamente lo que ocurre cuando una sociedad decide que la violencia es el camino para solucionar sus problemas.\r
+\r
+No estamos hablando de una posibilidad hipotética.\r
+\r
+**Ya estuvimos allí.**\r
+\r
+El informe ¡Basta Ya! del Centro Nacional de Memoria Histórica estimó que entre 1958 y 2012 aproximadamente **220.000 personas murieron como consecuencia del conflicto armado colombiano** .\r
+\r
+Y hay un dato todavía más doloroso:\r
+\r
+**el 81 % de esas víctimas eran civiles.**\r
+\r
+No eran los grandes responsables de la guerra.\r
+\r
+Eran personas comunes.\r
+\r
+Padres.\r
+\r
+Madres.\r
+\r
+Hijos.\r
+\r
+Campesinos.\r
+\r
+Personas que simplemente estaban viviendo en el lugar equivocado cuando otros decidieron que la violencia era la solución.\r
+\r
+La Comisión de la Verdad posteriormente estimó que entre 1985 y 2018 **450.664 personas perdieron la vida a causa del conflicto armado** , y advierte que, considerando el subregistro, el universo podría llegar a unas 800.000 víctimas.\r
+\r
+Entonces deberíamos preguntarnos:\r
+\r
+**¿Qué nos dejó tanta violencia?**\r
+\r
+¿Nos dejó paz?\r
+\r
+¿Nos dejó un país sin enemigos?\r
+\r
+¿Nos convirtió finalmente en “los buenos”?\r
+\r
+No.\r
+\r
+Nos dejó generaciones enteras marcadas por el miedo, el desplazamiento, las desapariciones, las masacres y el dolor.\r
+\r
+Porque la violencia tiene algo terrible:\r
+\r
+**rara vez termina donde comenzó.**\r
+\r
+Una persona mata a otra.\r
+\r
+La familia de esa persona busca venganza.\r
+\r
+La otra familia responde.\r
+\r
+Aparece otro grupo.\r
+\r
+Después otro.\r
+\r
+Y cada generación hereda una nueva razón para odiar.\r
+\r
+La sangre derramada se convierte en argumento para derramar más sangre.\r
+\r
+Y así, la violencia se convierte en una cadena.\r
+\r
+## Por eso me preocupa cuando empezamos a celebrar la muerte\r
+\r
+No importa si quien murió pertenecía a una guerrilla, a una banda criminal, a un grupo paramilitar o a cualquier otra organización.\r
+\r
+Podemos condenar sus actos.\r
+\r
+Podemos exigir justicia.\r
+\r
+Podemos pedir que quienes hacen daño sean detenidos y juzgados.\r
+\r
+Pero hay una diferencia enorme entre **hacer justicia y celebrar la muerte** .\r
+\r
+Porque cuando empezamos a mirar un cadáver y sentir satisfacción, algo dentro de nosotros también empieza a morir.\r
+\r
+Y creo que eso es especialmente delicado cuando viene desde quienes tienen el poder.\r
+\r
+Un ciudadano puede sentir rabia.\r
+\r
+Puede incluso pedir venganza.\r
+\r
+Pero un jefe de Estado tiene una responsabilidad diferente.\r
+\r
+Tiene el poder de las armas, de las instituciones y de la fuerza pública.\r
+\r
+Por eso deberíamos exigirle algo más que fuerza.\r
+\r
+**Deberíamos exigirle sabiduría.**\r
+\r
+No solamente que pueda derrotar a un enemigo, sino que pueda evitar crear diez enemigos nuevos.\r
+\r
+No solamente que pueda ganar una batalla, sino que pueda construir una paz que sobreviva a su gobierno.\r
+\r
+Porque exhibir cuerpos, convertir la muerte en espectáculo o presentar la eliminación del enemigo como una victoria moral puede hacer que olvidemos algo fundamental:\r
+\r
+**el muerto también fue un ser humano.**\r
+\r
+Y si somos cristianos, eso debería importarnos.\r
+\r
+Incluso cuando ese ser humano hizo cosas terribles.\r
+\r
+## Jesús no nos enseñó a preguntar quién merece nuestro amor\r
+\r
+Jesús hizo algo mucho más incómodo.\r
+\r
+Nos pidió amar precisamente a quienes creemos que no lo merecen.\r
+\r
+Porque ahí está la diferencia entre la justicia humana y el mensaje de Jesús.\r
+\r
+La lógica humana dice:\r
+\r
+<blockquote>“Me hiciste daño, entonces te devuelvo el daño.”</blockquote>\r
+\r
+Jesús dice:\r
+\r
+<blockquote>“No devuelvas mal por mal.”</blockquote>\r
+\r
+La lógica humana dice:\r
+\r
+<blockquote>“Si quieres paz, tienes que destruir a tus enemigos.”</blockquote>\r
+\r
+Jesús dice:\r
+\r
+<blockquote>“Bienaventurados los que trabajan por la paz.”</blockquote>\r
+\r
+La lógica humana dice:\r
+\r
+<blockquote>“Vence al enemigo.”</blockquote>\r
+\r
+Jesús dice:\r
+\r
+<blockquote>“Vence el mal con el bien.”</blockquote>\r
+\r
+Y quizás esta última frase sea la que más deberíamos llevarnos hoy.\r
+\r
+Porque Jesús no dice:\r
+\r
+<blockquote>“vence al malo.”</blockquote>\r
+\r
+Dice:\r
+\r
+<blockquote>“vence al mal.”</blockquote>\r
+\r
+Hay una diferencia enorme.\r
+\r
+Si nuestro objetivo es destruir personas, siempre tendremos un enemigo nuevo que destruir.\r
+\r
+Pero si nuestro objetivo es destruir el mal, entonces tenemos que preguntarnos cómo acabar con las condiciones que producen violencia, pobreza, exclusión, odio, corrupción, narcotráfico, fanatismo y desesperanza.\r
+\r
+Eso es mucho más difícil que disparar.\r
+\r
+Pero también es mucho más parecido a Jesús.\r
+\r
+## Y esto también nos toca a nosotros\r
+\r
+Es fácil escuchar todo esto y pensar:\r
+\r
+“Esto es para el presidente.”\r
+\r
+Pero no.\r
+\r
+También es para nosotros.\r
+\r
+Porque la guerra no empieza necesariamente con un fusil.\r
+\r
+A veces empieza en una conversación.\r
+\r
+Empieza cuando dejamos de ver al otro como persona.\r
+\r
+Cuando decimos:\r
+\r
+“Es un hijueputa.”\r
+\r
+“Es un guerrillero.”\r
+\r
+“Es un paraco.”\r
+\r
+“Es un comunista.”\r
+\r
+“Es un uribista.”\r
+\r
+“Es un petrista.”\r
+\r
+“Es un criminal.”\r
+\r
+“Es de los otros.”\r
+\r
+Y poco a poco dejamos de ver a una persona y empezamos a ver una etiqueta.\r
+\r
+Y cuando dejamos de ver personas, resulta mucho más fácil justificar que sufran.\r
+\r
+Por eso la pregunta del principio vuelve a aparecer:\r
+\r
+—Papá, si matamos a todos los malos, ¿solo quedan los buenos?\r
+\r
+—No hijo. **Solo quedaríamos los asesinos.**\r
+\r
+Porque el verdadero triunfo de la violencia no ocurre solamente cuando alguien muere.\r
+\r
+Ocurre cuando consigue convencernos de que matar al otro nos hace mejores.\r
+\r
+Y Jesús nos propone exactamente lo contrario.\r
+\r
+No vencer al odio con más odio.\r
+\r
+No vencer la violencia con más violencia.\r
+\r
+No convertirnos en aquello que combatimos.\r
+\r
+Sino algo muchísimo más difícil:\r
+\r
+**vencer el mal con el bien.**\r
+\r
+Quizás esa sea la verdadera paz que Colombia todavía está aprendiendo a construir.\r
+\r
+## Reflexión para responder internamente\r
+\r
+Para vos que estás leyendo esto y decidiste votar por una opción que propone la guerra como camino para recuperar la seguridad, quisiera dejarte una pregunta, no para que me la respondas a mí, sino para que te la respondas a vos mismo:\r
+\r
+**Si durante más de seis décadas Colombia ha intentado resolver la violencia mediante más violencia, y ese camino nos ha dejado cientos de miles de muertos, desplazados, desaparecidos y familias destruidas, ¿qué te hace pensar que esta vez el resultado será diferente?**\r
+\r
+Si la fórmula de **matar al enemigo para alcanzar la paz** no nos ha dado paz en más de 66 años de conflicto, ¿por qué crees que volver a utilizarla ahora sí va a funcionar?\r
+\r
+Jesús nos dejó una advertencia hace más de dos mil años:\r
+\r
+<blockquote>“Todos los que tomen espada, a espada perecerán.”</blockquote>\r
+\r
+Quizás, como seguidores de Jesús, deberíamos preguntarnos:\r
+\r
+**¿Cómo rompemos el ciclo que convierte a cada enemigo derrotado en el origen de un nuevo enemigo?**\r
+\r
+**Cada uno de esos cuerpos expuestos por el presidente eran padres, hijos, esposos, amigos. Cada uno de ellos tenía personas que los amaban y que, en este momento, están cargadas de rencor. La muerte de cada guerrillero creará varios guerrilleros más.**\r
+\r
+Colombia ya conoce el camino de la guerra.\r
+\r
+**Lo que todavía necesitamos aprender es el camino de la paz: aquel en el que cada guerrillero reinsertado a la sociedad es un guerrillero menos en la guerra y una persona más contribuyendo a construir la paz.**\r
+\r
+Siempre nos han inculcado que ser un buen católico o cristiano consiste en amar a Jesús. Pero poco se habla de que también consiste en **amar a Judas.**\r
 `,Yg=`---\r
 title: "¿Y si Dios se revela a través de lo humano?"\r
 category: "Fe"\r
@@ -2245,4 +2245,4 @@ Tal vez la verdadera adoración consiste en **convertirnos en personas que hacen
 Y si eso es amar a Dios, entonces la pregunta ya no es cuánto lo adorás.\r
 \r
 La pregunta es mucho más incómoda:<br>\r
-**¿Qué tan parecido al amor de Dios se siente el mundo cuando pasa por vos?**`,Hg={"el-diablo-es-humano":1691.19,"la-relatividad-de-la-religion":635.16};function Qg(q){const T={},x=q.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);if(!x)return{meta:T,body:q.trim()};const p=x[1],E=x[2].trim();for(const z of p.split(/\r?\n/)){const C=z.indexOf(":");if(C===-1)continue;const H=z.slice(0,C).trim();let U=z.slice(C+1).trim();(U.startsWith('"')&&U.endsWith('"')||U.startsWith("'")&&U.endsWith("'"))&&(U=U.slice(1,-1)),T[H]=U}return{meta:T,body:E}}function Rg(q,T){if(T.size===0)return q;const x=E=>{const z=E.replace(/^\.\//,"");return T.get(z)??E};let p=q.replace(/(!\[.*?\]\()(\.\/[^)\s]+)(\))/g,(E,z,C,H)=>`${z}${x(C)}${H}`);return p=p.replace(/(src|srcset)=["'](\.\/[^"']+)["']/gi,(E,z,C)=>`${z}="${x(C)}"`),p}function Bg(q){return q.replace(/<[^>]+>/g," ").replace(/[#>*_`~-]/g," ").replace(/\[[^\]]*\]\([^)]*\)/g," ").trim().split(/\s+/).filter(Boolean).length}function Lg(q){const[T,x,p]=q.split("-").map(Number);return!T||!x||!p?q:new Date(T,x-1,p).toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"})}const Gg=Object.assign({"/src/contenido/el-arte-de-escuchar-a-quien-piensa-distinto/carta.md":Og,"/src/contenido/el-diablo-es-humano/carta.md":jg,"/src/contenido/la-relatividad-de-la-religion/carta.md":Mg,"/src/contenido/mientras-mas-se-sabe-mas-se-sufre/carta.md":_g,"/src/contenido/si-matamos-a-todos-los-malos/carta.md":Cg,"/src/contenido/y-si-dios-se-revela-a-traves-de-lo-humano/carta.md":Yg,"/src/contenido/y-si-hemos-entendido-mal-el-amor-de-dios/carta.md":Ug}),Vg=Object.assign({});function Xg(){const q=new Map;for(const[T,x]of Object.entries(Vg)){const p=T.replace(/\\/g,"/").split("/"),E=p[3],z=p.slice(4).join("/");!E||!z||(q.has(E)||q.set(E,new Map),q.get(E).set(z,x.default))}return q}const Zg=Xg();function Jg(){const q=[];for(const[T,x]of Object.entries(Gg)){const E=T.replace(/\\/g,"/").split("/")[3];if(!E)continue;const{meta:z,body:C}=Qg(x),H=Zg.get(E)??new Map,U=Rg(C,H),$=(z.tags??"").split(",").map(G=>G.trim()).filter(Boolean),ye=z.biblicalQuote&&z.biblicalReference?{quote:z.biblicalQuote,reference:z.biblicalReference,context:z.biblicalContext||void 0}:void 0;q.push({slug:E,title:z.title??"",category:z.category??"Sociedad",secondaryCategory:z.secondaryCategory||void 0,tags:$,excerpt:z.excerpt??"",date:z.date??"",year:(z.date??"").slice(0,4),formattedDate:Lg(z.date??""),readingTime:z.readingTime??"",wordCount:Bg(U),biblicalQuote:ye,body:U,audioDuration:Hg[E]})}return q.sort((T,x)=>new Date(x.date).getTime()-new Date(T.date).getTime()),q.map((T,x)=>({...T,indexNumber:String(x+1).padStart(2,"0")}))}const ul=Jg(),Kg={Guerra:"Reflexiones sobre el conflicto, la violencia y sus costos humanos",Paz:"La búsqueda activa de reconciliación y convivencia serena",Fe:"Preguntas honestas sobre lo sagrado, la gracia y la trascendencia",Amor:"La entrega sincera, el desapego y los vínculos afectivos",Justicia:"La defensa de la verdad y la dignidad de los desamparados",Libertad:"La soberanía de la conciencia frente a la coerción",Familia:"Los lazos de origen, las memorias compartidas y el perdón mutuo",Sociedad:"Los desafíos comunes de nuestra convivencia contemporánea",Miedo:"El reconocimiento de la vulnerabilidad y el valor de resistir",Empatía:"El ejercicio de ponerse en los zapatos y el dolor de otro ser",Política:"La integridad moral por encima del partidismo y el poder"},eh=Object.entries(Kg).map(([q,T])=>({name:q,description:T,count:ul.filter(x=>x.category.toLowerCase()===q.toLowerCase()||x.tags.some(p=>p.toLowerCase()===q.toLowerCase())).length})),wg=te.lazy(()=>It(()=>import("./HomeView-CgRvxfMg.js"),__vite__mapDeps([0,1,2,3,4,5])).then(q=>({default:q.HomeView}))),kg=te.lazy(()=>It(()=>import("./ArchiveView-QYTAmG_C.js"),__vite__mapDeps([6,1,2,3,7,5])).then(q=>({default:q.ArchiveView}))),Fg=te.lazy(()=>It(()=>import("./LetterDetailView-B_Fpdj5F.js"),__vite__mapDeps([8,1,3,7,9,4,5])).then(q=>({default:q.LetterDetailView}))),Wg=te.lazy(()=>It(()=>import("./AboutView-CfyyBMug.js"),__vite__mapDeps([10,1,9,5])).then(q=>({default:q.AboutView})));function $g(){const q="cartas_que_quedan_theme",T=()=>typeof window<"u"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light",[x,p]=te.useState(()=>{if(typeof window<"u"){const S=localStorage.getItem(q);if(S==="dark"||S==="light")return S}return T()});te.useEffect(()=>{const S=document.documentElement;x==="dark"?S.classList.add("dark"):S.classList.remove("dark")},[x]),te.useEffect(()=>{if(typeof window>"u"||!window.matchMedia)return;const S=window.matchMedia("(prefers-color-scheme: dark)"),fe=se=>{const ha=localStorage.getItem(q);ha==="dark"||ha==="light"||p(se.matches?"dark":"light")};return S.addEventListener("change",fe),()=>S.removeEventListener("change",fe)},[]);const E=()=>{p(S=>{const fe=S==="light"?"dark":"light";return localStorage.setItem(q,fe),fe})},[z,C]=te.useState(()=>{if(typeof window<"u"){const S=localStorage.getItem("cartas_que_quedan_fontsize");if(S&&["sm","base","lg","xl"].includes(S))return S}return"base"}),H=S=>{C(S),localStorage.setItem("cartas_que_quedan_fontsize",S)},[U,$]=te.useState(!1),ye="/cartas/",G=S=>{const fe=ye.replace(/\/$/,"");let se=S;return fe&&se.startsWith(fe)&&(se=se.slice(fe.length)),se.startsWith("/")||(se=`/${se}`),se},M=S=>`${ye.replace(/\/$/,"")}${S}`||"/",ba=()=>{if(typeof window>"u")return{type:"home"};const S=G(window.location.pathname);if(S.startsWith("/carta/")){const fe=S.replace("/carta/","").replace(/\/$/,"");if(fe)return{type:"letter",slug:fe}}else if(S==="/archivo"||S.startsWith("/archivo")){const fe=new URLSearchParams(window.location.search),se=fe.get("categoria")||void 0,ha=fe.get("q")||void 0;return{type:"archive",category:se,search:ha}}else if(S==="/sobre"||S.startsWith("/sobre"))return{type:"about"};return{type:"home"}},[oe,ga]=te.useState(ba),X=(S,fe=!1)=>{let se="/";S.type==="archive"?se=S.category?`/archivo?categoria=${encodeURIComponent(S.category)}`:"/archivo":S.type==="letter"?se=`/carta/${S.slug}`:S.type==="about"&&(se="/sobre"),se=M(se),fe?window.history.replaceState({view:S},"",se):window.history.pushState({view:S},"",se),ga(S),window.scrollTo({top:0,behavior:"smooth"})};te.useEffect(()=>{const S=()=>{ga(ba())};return window.addEventListener("popstate",S),()=>window.removeEventListener("popstate",S)},[]),te.useEffect(()=>{oe.type!=="letter"&&U&&$(!1)},[oe,U]),te.useEffect(()=>{if(oe.type==="letter"){const S=ul.find(fe=>fe.slug===oe.slug);if(S){document.title=`${S.title} — Cartas que quedan`;return}}else if(oe.type==="archive"){document.title="Archivo de documentos — Cartas que quedan";return}else if(oe.type==="about"){document.title="Sobre el proyecto — Cartas que quedan";return}document.title="Cartas que quedan — Un archivo digital"},[oe]);const ua=oe.type==="letter"?ul.find(S=>S.slug===oe.slug)||ul[0]:null;return j.jsxs("div",{className:"min-h-screen flex flex-col bg-[#ece9e4] dark:bg-[#1c1b1b] text-[#211e1c] dark:text-[#ede7e0] transition-colors duration-200 selection:bg-[#b84e2a]/20 selection:text-[#211e1c] dark:selection:bg-[#cf6e4b]/30 dark:selection:text-[#ede7e0]",children:[!U&&j.jsx(Dg,{currentView:oe,onNavigate:S=>X(S),theme:x,onToggleTheme:E}),j.jsx("main",{className:"flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8",children:j.jsxs(te.Suspense,{fallback:j.jsx("div",{className:"flex items-center justify-center py-32 text-[#8c8479] dark:text-[#7d756a]",role:"status","aria-live":"polite",children:j.jsx("span",{className:"font-serif text-sm tracking-wide animate-pulse",children:"Cargando…"})}),children:[oe.type==="home"&&j.jsx(wg,{letters:ul,onSelectLetter:S=>X({type:"letter",slug:S.slug}),onListenLetter:S=>X({type:"letter",slug:S.slug,autoplay:!0}),onNavigateArchive:S=>X({type:"archive",category:S}),onNavigateAbout:()=>X({type:"about"})}),oe.type==="archive"&&j.jsx(kg,{letters:ul,initialCategory:oe.category,initialSearch:oe.search,onSelectLetter:S=>X({type:"letter",slug:S.slug}),onListenLetter:S=>X({type:"letter",slug:S.slug,autoplay:!0})}),oe.type==="letter"&&ua&&j.jsx(Fg,{letter:ua,autoplayAudio:oe.autoplay===!0,allLetters:ul,onBackToArchive:()=>X({type:"archive"}),onSelectCategory:S=>X({type:"archive",category:S}),onSelectLetter:S=>X({type:"letter",slug:S.slug}),theme:x,onToggleTheme:E,fontSize:z,onChangeFontSize:H,isFocusMode:U,onToggleFocusMode:()=>$(S=>!S)}),oe.type==="about"&&j.jsx(Wg,{onBackToHome:()=>X({type:"home"}),onGoToArchive:()=>X({type:"archive"})})]})}),!U&&j.jsx(Ag,{onNavigate:S=>X(S)})]})}ug({immediate:!0});lg.createRoot(document.getElementById("root")).render(j.jsx(te.StrictMode,{children:j.jsx($g,{})}));export{eh as C,vg as M,Pf as O,gg as S,zg as X,eo as c};
+**¿Qué tan parecido al amor de Dios se siente el mundo cuando pasa por vos?**`,Hg={"el-diablo-es-humano":1691.19,"la-relatividad-de-la-religion":635.16,"mientras-mas-se-sabe-mas-se-sufre":988};function Qg(q){const T={},x=q.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);if(!x)return{meta:T,body:q.trim()};const p=x[1],E=x[2].trim();for(const z of p.split(/\r?\n/)){const C=z.indexOf(":");if(C===-1)continue;const H=z.slice(0,C).trim();let U=z.slice(C+1).trim();(U.startsWith('"')&&U.endsWith('"')||U.startsWith("'")&&U.endsWith("'"))&&(U=U.slice(1,-1)),T[H]=U}return{meta:T,body:E}}function Rg(q,T){if(T.size===0)return q;const x=E=>{const z=E.replace(/^\.\//,"");return T.get(z)??E};let p=q.replace(/(!\[.*?\]\()(\.\/[^)\s]+)(\))/g,(E,z,C,H)=>`${z}${x(C)}${H}`);return p=p.replace(/(src|srcset)=["'](\.\/[^"']+)["']/gi,(E,z,C)=>`${z}="${x(C)}"`),p}function Bg(q){return q.replace(/<[^>]+>/g," ").replace(/[#>*_`~-]/g," ").replace(/\[[^\]]*\]\([^)]*\)/g," ").trim().split(/\s+/).filter(Boolean).length}function Lg(q){const[T,x,p]=q.split("-").map(Number);return!T||!x||!p?q:new Date(T,x-1,p).toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"})}const Gg=Object.assign({"/src/contenido/el-arte-de-escuchar-a-quien-piensa-distinto/carta.md":Og,"/src/contenido/el-diablo-es-humano/carta.md":jg,"/src/contenido/la-relatividad-de-la-religion/carta.md":Mg,"/src/contenido/mientras-mas-se-sabe-mas-se-sufre/carta.md":_g,"/src/contenido/si-matamos-a-todos-los-malos/carta.md":Cg,"/src/contenido/y-si-dios-se-revela-a-traves-de-lo-humano/carta.md":Yg,"/src/contenido/y-si-hemos-entendido-mal-el-amor-de-dios/carta.md":Ug}),Vg=Object.assign({});function Xg(){const q=new Map;for(const[T,x]of Object.entries(Vg)){const p=T.replace(/\\/g,"/").split("/"),E=p[3],z=p.slice(4).join("/");!E||!z||(q.has(E)||q.set(E,new Map),q.get(E).set(z,x.default))}return q}const Zg=Xg();function Jg(){const q=[];for(const[T,x]of Object.entries(Gg)){const E=T.replace(/\\/g,"/").split("/")[3];if(!E)continue;const{meta:z,body:C}=Qg(x),H=Zg.get(E)??new Map,U=Rg(C,H),$=(z.tags??"").split(",").map(G=>G.trim()).filter(Boolean),ye=z.biblicalQuote&&z.biblicalReference?{quote:z.biblicalQuote,reference:z.biblicalReference,context:z.biblicalContext||void 0}:void 0;q.push({slug:E,title:z.title??"",category:z.category??"Sociedad",secondaryCategory:z.secondaryCategory||void 0,tags:$,excerpt:z.excerpt??"",date:z.date??"",year:(z.date??"").slice(0,4),formattedDate:Lg(z.date??""),readingTime:z.readingTime??"",wordCount:Bg(U),biblicalQuote:ye,body:U,audioDuration:Hg[E]})}return q.sort((T,x)=>new Date(x.date).getTime()-new Date(T.date).getTime()),q.map((T,x)=>({...T,indexNumber:String(x+1).padStart(2,"0")}))}const ul=Jg(),Kg={Guerra:"Reflexiones sobre el conflicto, la violencia y sus costos humanos",Paz:"La búsqueda activa de reconciliación y convivencia serena",Fe:"Preguntas honestas sobre lo sagrado, la gracia y la trascendencia",Amor:"La entrega sincera, el desapego y los vínculos afectivos",Justicia:"La defensa de la verdad y la dignidad de los desamparados",Libertad:"La soberanía de la conciencia frente a la coerción",Familia:"Los lazos de origen, las memorias compartidas y el perdón mutuo",Sociedad:"Los desafíos comunes de nuestra convivencia contemporánea",Miedo:"El reconocimiento de la vulnerabilidad y el valor de resistir",Empatía:"El ejercicio de ponerse en los zapatos y el dolor de otro ser",Política:"La integridad moral por encima del partidismo y el poder"},eh=Object.entries(Kg).map(([q,T])=>({name:q,description:T,count:ul.filter(x=>x.category.toLowerCase()===q.toLowerCase()||x.tags.some(p=>p.toLowerCase()===q.toLowerCase())).length})),wg=te.lazy(()=>It(()=>import("./HomeView-c2A74lX-.js"),__vite__mapDeps([0,1,2,3,4,5])).then(q=>({default:q.HomeView}))),kg=te.lazy(()=>It(()=>import("./ArchiveView-DY4upIoW.js"),__vite__mapDeps([6,1,2,3,7,5])).then(q=>({default:q.ArchiveView}))),Fg=te.lazy(()=>It(()=>import("./LetterDetailView-CbXA_IBW.js"),__vite__mapDeps([8,1,3,7,9,4,5])).then(q=>({default:q.LetterDetailView}))),Wg=te.lazy(()=>It(()=>import("./AboutView-B9Hx-o2Q.js"),__vite__mapDeps([10,1,9,5])).then(q=>({default:q.AboutView})));function $g(){const q="cartas_que_quedan_theme",T=()=>typeof window<"u"&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light",[x,p]=te.useState(()=>{if(typeof window<"u"){const S=localStorage.getItem(q);if(S==="dark"||S==="light")return S}return T()});te.useEffect(()=>{const S=document.documentElement;x==="dark"?S.classList.add("dark"):S.classList.remove("dark")},[x]),te.useEffect(()=>{if(typeof window>"u"||!window.matchMedia)return;const S=window.matchMedia("(prefers-color-scheme: dark)"),fe=se=>{const ha=localStorage.getItem(q);ha==="dark"||ha==="light"||p(se.matches?"dark":"light")};return S.addEventListener("change",fe),()=>S.removeEventListener("change",fe)},[]);const E=()=>{p(S=>{const fe=S==="light"?"dark":"light";return localStorage.setItem(q,fe),fe})},[z,C]=te.useState(()=>{if(typeof window<"u"){const S=localStorage.getItem("cartas_que_quedan_fontsize");if(S&&["sm","base","lg","xl"].includes(S))return S}return"base"}),H=S=>{C(S),localStorage.setItem("cartas_que_quedan_fontsize",S)},[U,$]=te.useState(!1),ye="/cartas/",G=S=>{const fe=ye.replace(/\/$/,"");let se=S;return fe&&se.startsWith(fe)&&(se=se.slice(fe.length)),se.startsWith("/")||(se=`/${se}`),se},M=S=>`${ye.replace(/\/$/,"")}${S}`||"/",ba=()=>{if(typeof window>"u")return{type:"home"};const S=G(window.location.pathname);if(S.startsWith("/carta/")){const fe=S.replace("/carta/","").replace(/\/$/,"");if(fe)return{type:"letter",slug:fe}}else if(S==="/archivo"||S.startsWith("/archivo")){const fe=new URLSearchParams(window.location.search),se=fe.get("categoria")||void 0,ha=fe.get("q")||void 0;return{type:"archive",category:se,search:ha}}else if(S==="/sobre"||S.startsWith("/sobre"))return{type:"about"};return{type:"home"}},[oe,ga]=te.useState(ba),X=(S,fe=!1)=>{let se="/";S.type==="archive"?se=S.category?`/archivo?categoria=${encodeURIComponent(S.category)}`:"/archivo":S.type==="letter"?se=`/carta/${S.slug}`:S.type==="about"&&(se="/sobre"),se=M(se),fe?window.history.replaceState({view:S},"",se):window.history.pushState({view:S},"",se),ga(S),window.scrollTo({top:0,behavior:"smooth"})};te.useEffect(()=>{const S=()=>{ga(ba())};return window.addEventListener("popstate",S),()=>window.removeEventListener("popstate",S)},[]),te.useEffect(()=>{oe.type!=="letter"&&U&&$(!1)},[oe,U]),te.useEffect(()=>{if(oe.type==="letter"){const S=ul.find(fe=>fe.slug===oe.slug);if(S){document.title=`${S.title} — Cartas que quedan`;return}}else if(oe.type==="archive"){document.title="Archivo de documentos — Cartas que quedan";return}else if(oe.type==="about"){document.title="Sobre el proyecto — Cartas que quedan";return}document.title="Cartas que quedan — Un archivo digital"},[oe]);const ua=oe.type==="letter"?ul.find(S=>S.slug===oe.slug)||ul[0]:null;return j.jsxs("div",{className:"min-h-screen flex flex-col bg-[#ece9e4] dark:bg-[#1c1b1b] text-[#211e1c] dark:text-[#ede7e0] transition-colors duration-200 selection:bg-[#b84e2a]/20 selection:text-[#211e1c] dark:selection:bg-[#cf6e4b]/30 dark:selection:text-[#ede7e0]",children:[!U&&j.jsx(Dg,{currentView:oe,onNavigate:S=>X(S),theme:x,onToggleTheme:E}),j.jsx("main",{className:"flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 md:px-8",children:j.jsxs(te.Suspense,{fallback:j.jsx("div",{className:"flex items-center justify-center py-32 text-[#8c8479] dark:text-[#7d756a]",role:"status","aria-live":"polite",children:j.jsx("span",{className:"font-serif text-sm tracking-wide animate-pulse",children:"Cargando…"})}),children:[oe.type==="home"&&j.jsx(wg,{letters:ul,onSelectLetter:S=>X({type:"letter",slug:S.slug}),onListenLetter:S=>X({type:"letter",slug:S.slug,autoplay:!0}),onNavigateArchive:S=>X({type:"archive",category:S}),onNavigateAbout:()=>X({type:"about"})}),oe.type==="archive"&&j.jsx(kg,{letters:ul,initialCategory:oe.category,initialSearch:oe.search,onSelectLetter:S=>X({type:"letter",slug:S.slug}),onListenLetter:S=>X({type:"letter",slug:S.slug,autoplay:!0})}),oe.type==="letter"&&ua&&j.jsx(Fg,{letter:ua,autoplayAudio:oe.autoplay===!0,allLetters:ul,onBackToArchive:()=>X({type:"archive"}),onSelectCategory:S=>X({type:"archive",category:S}),onSelectLetter:S=>X({type:"letter",slug:S.slug}),theme:x,onToggleTheme:E,fontSize:z,onChangeFontSize:H,isFocusMode:U,onToggleFocusMode:()=>$(S=>!S)}),oe.type==="about"&&j.jsx(Wg,{onBackToHome:()=>X({type:"home"}),onGoToArchive:()=>X({type:"archive"})})]})}),!U&&j.jsx(Ag,{onNavigate:S=>X(S)})]})}ug({immediate:!0});lg.createRoot(document.getElementById("root")).render(j.jsx(te.StrictMode,{children:j.jsx($g,{})}));export{eh as C,vg as M,Pf as O,gg as S,zg as X,eo as c};
