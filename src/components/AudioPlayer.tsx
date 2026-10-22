@@ -31,13 +31,24 @@ interface AudioPlayerProps {
   title: string;
   /** Without the site header the sticky bar sits at the very top. */
   isFocusMode: boolean;
+  /** Start playing as soon as the audio is available (from a list's "Escuchar"). */
+  autoPlay?: boolean;
+  /** With `autoPlay`: the page was restored to the reader's saved position, so
+   *  start from the sentence on screen instead of the beginning ("Continuar"). */
+  startAtReadingPosition?: boolean;
 }
 
 /** Narrated version of a letter. Renders nothing unless
  *  `public/audio/<slug>.json` (timings) exists next to `<slug>.mp3`.
  *  While a listening session is active the bar sticks below the header,
  *  highlights the sentence being read and scrolls the page along with it. */
-export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMode }) => {
+export const AudioPlayer: React.FC<AudioPlayerProps> = ({
+  slug,
+  title,
+  isFocusMode,
+  autoPlay = false,
+  startAtReadingPosition = false,
+}) => {
   const base = `${import.meta.env.BASE_URL}audio/${slug}`;
   const audioRef = useRef<HTMLAudioElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
@@ -48,6 +59,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
   const [time, setTime] = useState(0);
   const [speedIndex, setSpeedIndex] = useState(0);
   const [following, setFollowing] = useState(true);
+  // Autoplay was requested but the browser blocked it: invite a tap instead.
+  const [needsTap, setNeedsTap] = useState(false);
 
   const rangesRef = useRef<(Range | null)[] | null>(null);
   const currentRef = useRef(-1);
@@ -60,6 +73,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
     setActive(false);
     setPlaying(false);
     setTime(0);
+    setNeedsTap(false);
     rangesRef.current = null;
     currentRef.current = -1;
     fetch(`${base}.json`)
@@ -74,6 +88,38 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
       cancelled = true;
     };
   }, [base]);
+
+  // Arriving from a list's "Escuchar": start right away. The click that got
+  // us here usually counts as user activation; browsers that still refuse
+  // (mostly iOS Safari) get a highlighted play button instead.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!autoPlay || !data || !audio) return;
+
+    const start = () => {
+      if (startAtReadingPosition) {
+        const index = fragmentOnScreen(data.fragments);
+        if (index > 0) audio.currentTime = data.fragments[index].start;
+      }
+      setActive(true);
+      audio.play().catch(() => {
+        setActive(false);
+        setNeedsTap(true);
+      });
+    };
+
+    if (!startAtReadingPosition) {
+      start();
+      return;
+    }
+    // Let the letter view restore the saved scroll position first (it does so
+    // on the next animation frame), then read which sentence is on screen.
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(start);
+    });
+    return () => cancelAnimationFrame(frame);
+    // Runs once per loaded letter; the other inputs are read at that moment.
+  }, [autoPlay, data]);
 
   const clearHighlight = useCallback(() => {
     if (supportsHighlights()) CSS.highlights.delete(HIGHLIGHT_NAME);
@@ -96,11 +142,28 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
     []
   );
 
+  /** Where the bar's bottom edge sits once stuck below the header (h-16). */
+  const stuckBarBottom = useCallback(
+    () => (isFocusMode ? 0 : 64) + (barRef.current?.offsetHeight ?? 0),
+    [isFocusMode]
+  );
+
+  /** First fragment reaching the reading line: the spot where auto-follow keeps
+   *  the sentence being read (30% down the area below the bar). Leans a little
+   *  earlier so resuming never skips the sentence the reader stopped on. */
+  const fragmentOnScreen = (fragments: AudioFragment[]): number => {
+    const ranges = rangesRef.current ?? locateFragments(readAlongRoots(), fragments);
+    rangesRef.current = ranges;
+    const barBottom = stuckBarBottom();
+    const line = barBottom + (window.innerHeight - barBottom) * 0.2;
+    return ranges.findIndex((range) => range !== null && range.getBoundingClientRect().bottom >= line);
+  };
+
   const scrollToRange = useCallback((range: Range) => {
     const rect = range.getBoundingClientRect();
-    // Where the bar's bottom edge sits once stuck (it may not be stuck yet when
-    // a seek jumps far down the letter). Header is h-16 = 64px.
-    const barBottom = (isFocusMode ? 0 : 64) + (barRef.current?.offsetHeight ?? 0);
+    // Use the stuck position: the bar may not be stuck yet when a seek jumps
+    // far down the letter.
+    const barBottom = stuckBarBottom();
     const comfortableTop = barBottom + 24;
     const comfortableBottom = window.innerHeight - 120;
     if (rect.top < comfortableTop || rect.bottom > comfortableBottom) {
@@ -109,7 +172,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
       const behavior = Math.abs(delta) > window.innerHeight * 1.5 ? 'instant' : 'smooth';
       window.scrollTo({ top: Math.max(0, window.scrollY + delta), behavior });
     }
-  }, [isFocusMode]);
+  }, [stuckBarBottom]);
 
   // Highlight (and follow) the fragment being read.
   const syncTo = useCallback(
@@ -192,6 +255,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
     if (!audio) return;
     if (audio.paused) {
       setActive(true);
+      setNeedsTap(false);
       void audio.play();
     } else {
       audio.pause();
@@ -273,7 +337,9 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
             type="button"
             onClick={togglePlay}
             aria-label={playing ? 'Pausar narración' : 'Escuchar la carta'}
-            className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#b84e2a] dark:bg-[#cf6e4b] text-white hover:bg-[#a04322] dark:hover:bg-[#d97e5c] transition-colors shadow-sm"
+            className={`shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#b84e2a] dark:bg-[#cf6e4b] text-white hover:bg-[#a04322] dark:hover:bg-[#d97e5c] transition-colors shadow-sm ${
+              needsTap ? 'ring-4 ring-[#b84e2a]/30 dark:ring-[#cf6e4b]/30 animate-pulse' : ''
+            }`}
           >
             {playing ? <Pause className="w-5 h-5" fill="currentColor" /> : <Play className="w-5 h-5 ml-0.5" fill="currentColor" />}
           </button>
@@ -304,7 +370,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ slug, title, isFocusMo
             <div className="flex-1 min-w-0">
               <p className="font-sans text-sm font-medium text-[#211e1c] dark:text-[#ede7e0] inline-flex items-center gap-1.5">
                 <Headphones className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
-                Escuchar la carta · {formatTime(duration)}
+                {needsTap ? 'Toca ▶ para empezar a escuchar' : `Escuchar la carta · ${formatTime(duration)}`}
               </p>
               <p className="font-sans text-xs text-[#6b645c] dark:text-[#9c958c] mt-0.5 leading-snug">
                 <Bot className="inline w-3.5 h-3.5 -mt-0.5 mr-1 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />

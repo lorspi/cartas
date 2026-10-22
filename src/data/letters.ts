@@ -3,6 +3,7 @@
 // Markdown files with YAML-ish frontmatter. No central manifest needed.
 // ---------------------------------------------------------------------------
 
+import audioIndex from 'virtual:audio-index';
 import { Letter, Category } from '../types';
 
 // ---------- helpers -------------------------------------------------------
@@ -158,6 +159,7 @@ function buildLetters(): Letter[] {
       wordCount: countWords(resolvedBody),
       biblicalQuote,
       body: resolvedBody,
+      audioDuration: audioIndex[slug],
     });
   }
 

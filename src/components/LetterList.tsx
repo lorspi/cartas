@@ -5,6 +5,7 @@ import { LetterListItem } from './LetterListItem';
 interface LetterListProps {
   letters: Letter[];
   onSelectLetter: (letter: Letter) => void;
+  onListenLetter?: (letter: Letter) => void;
   onSelectCategory?: (category: string) => void;
   emptyMessage?: string;
 }
@@ -12,6 +13,7 @@ interface LetterListProps {
 export const LetterList: React.FC<LetterListProps> = ({
   letters,
   onSelectLetter,
+  onListenLetter,
   onSelectCategory,
   emptyMessage = 'No se encontraron cartas en este archivo.',
 }) => {
@@ -35,6 +37,7 @@ export const LetterList: React.FC<LetterListProps> = ({
           key={letter.slug}
           letter={letter}
           onSelect={onSelectLetter}
+          onListen={onListenLetter}
           onSelectCategory={onSelectCategory}
         />
       ))}

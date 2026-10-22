@@ -7,6 +7,8 @@ import { CATEGORIES } from '../data/letters';
 interface HomeViewProps {
   letters: Letter[];
   onSelectLetter: (letter: Letter) => void;
+  /** Opens the letter and starts its narration. */
+  onListenLetter: (letter: Letter) => void;
   onNavigateArchive: (category?: string) => void;
   onNavigateAbout: () => void;
 }
@@ -14,6 +16,7 @@ interface HomeViewProps {
 export const HomeView: React.FC<HomeViewProps> = ({
   letters,
   onSelectLetter,
+  onListenLetter,
   onNavigateArchive,
   onNavigateAbout,
 }) => {
@@ -97,6 +100,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <LetterList
           letters={recentLetters}
           onSelectLetter={onSelectLetter}
+          onListenLetter={onListenLetter}
           onSelectCategory={(cat) => onNavigateArchive(cat)}
         />
 

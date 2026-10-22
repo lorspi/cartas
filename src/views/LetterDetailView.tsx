@@ -347,6 +347,8 @@ function LetterBody({
 
 interface LetterDetailViewProps {
   letter: Letter;
+  /** Start the narration on arrival (the reader chose "Escuchar" in a list). */
+  autoplayAudio?: boolean;
   allLetters: Letter[];
   onBackToArchive: () => void;
   onSelectCategory: (category: string) => void;
@@ -361,6 +363,7 @@ interface LetterDetailViewProps {
 
 export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   letter,
+  autoplayAudio = false,
   allLetters,
   onBackToArchive,
   onSelectCategory,
@@ -386,9 +389,8 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
   // "Seguir leyendo": resume roughly where the reader left off in this letter
   // instead of always jumping to the top. Skipped for letters barely started
   // or already finished, where starting from the top makes more sense.
+  const shouldResume = initialProgress > 3 && initialProgress < READING_COMPLETE_THRESHOLD;
   useEffect(() => {
-    const shouldResume = initialProgress > 3 && initialProgress < READING_COMPLETE_THRESHOLD;
-
     if (!shouldResume) {
       window.scrollTo({ top: 0, behavior: 'instant' });
       return;
@@ -403,7 +405,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
       }
     });
     return () => cancelAnimationFrame(frame);
-  }, [letter.slug, initialProgress]);
+  }, [letter.slug, initialProgress, shouldResume]);
 
   // Find previous and next letters in chronological/archive order
   const currentIndex = allLetters.findIndex((l) => l.slug === letter.slug);
@@ -577,7 +579,13 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
 
         {/* Narrated version (only when public/audio/<slug>.json exists). Lives
             outside the header so it can stay sticky through the whole letter. */}
-        <AudioPlayer slug={letter.slug} title={letter.title} isFocusMode={isFocusMode} />
+        <AudioPlayer
+          slug={letter.slug}
+          title={letter.title}
+          isFocusMode={isFocusMode}
+          autoPlay={autoplayAudio}
+          startAtReadingPosition={shouldResume}
+        />
 
         {/* Letter Body Content */}
         <section

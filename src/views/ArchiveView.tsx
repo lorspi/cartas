@@ -11,6 +11,8 @@ interface ArchiveViewProps {
   initialCategory?: string;
   initialSearch?: string;
   onSelectLetter: (letter: Letter) => void;
+  /** Opens the letter and starts its narration. */
+  onListenLetter: (letter: Letter) => void;
 }
 
 type SortOrder = 'newest' | 'oldest' | 'readingTime';
@@ -55,6 +57,7 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
   initialCategory,
   initialSearch = '',
   onSelectLetter,
+  onListenLetter,
 }) => {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
@@ -223,6 +226,7 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
       <LetterList
         letters={filteredLetters}
         onSelectLetter={onSelectLetter}
+        onListenLetter={onListenLetter}
         onSelectCategory={(cat) => setSelectedCategory(cat)}
         emptyMessage={
           searchQuery

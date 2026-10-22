@@ -38,6 +38,8 @@ export interface Letter {
   biblicalQuote?: BiblicalQuote;
   /** Raw markdown body — relative image URLs are already resolved to absolute Vite-served URLs. */
   body: string;
+  /** Length in seconds of the narrated version, when public/audio/<slug>.mp3 exists. */
+  audioDuration?: number;
 }
 
 export type ThemeMode = 'light' | 'dark';
@@ -46,5 +48,6 @@ export type FontSizeScale = 'sm' | 'base' | 'lg' | 'xl';
 export type AppView =
   | { type: 'home' }
   | { type: 'archive'; category?: string; search?: string }
-  | { type: 'letter'; slug: string }
+  /** `autoplay` starts the narration on arrival (from a list's "Escuchar"). */
+  | { type: 'letter'; slug: string; autoplay?: boolean }
   | { type: 'about' };

@@ -1,7 +1,36 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, Plugin} from 'vite';
+
+/** Exposes `virtual:audio-index`: `{ [slug]: durationSeconds }` for every
+ *  narrated letter (public/audio/<slug>.json, written by the audio generator).
+ *  Lets the home/archive lists show a "listen" button without fetching. */
+function audioIndex(): Plugin {
+  const id = 'virtual:audio-index';
+  const resolved = '\0' + id;
+  const dir = path.resolve(__dirname, 'public/audio');
+  return {
+    name: 'audio-index',
+    resolveId: (source) => (source === id ? resolved : undefined),
+    load(loadId) {
+      if (loadId !== resolved) return;
+      const index: Record<string, number> = {};
+      if (fs.existsSync(dir)) {
+        for (const file of fs.readdirSync(dir)) {
+          if (!file.endsWith('.json')) continue;
+          const slug = file.slice(0, -'.json'.length);
+          if (!fs.existsSync(path.join(dir, `${slug}.mp3`))) continue;
+          this.addWatchFile(path.join(dir, file));
+          const {duration} = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          index[slug] = duration;
+        }
+      }
+      return `export default ${JSON.stringify(index)};`;
+    },
+  };
+}
 import {VitePWA} from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
@@ -12,6 +41,7 @@ export default defineConfig(() => {
   return {
     base,
     plugins: [
+      audioIndex(),
       react(),
       tailwindcss(),
       VitePWA({

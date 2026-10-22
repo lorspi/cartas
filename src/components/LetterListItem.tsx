@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Clock, ArrowUpRight } from 'lucide-react';
+import { Clock, ArrowUpRight, Play } from 'lucide-react';
 import { Letter } from '../types';
 import { CategoryBadge } from './CategoryBadge';
 import { LetterProgressBar } from './LetterProgressBar';
-import { getReadingProgress, isLetterCompleted } from '../utils/readingProgress';
+import {
+  getReadingProgress,
+  isLetterCompleted,
+  READING_COMPLETE_THRESHOLD,
+} from '../utils/readingProgress';
 
 interface LetterListItemProps {
   letter: Letter;
   onSelect: (letter: Letter) => void;
+  /** Opens the letter and starts its narration; shown only for narrated letters. */
+  onListen?: (letter: Letter) => void;
   onSelectCategory?: (category: string) => void;
   showExcerpt?: boolean;
 }
@@ -15,6 +21,7 @@ interface LetterListItemProps {
 export const LetterListItem: React.FC<LetterListItemProps> = ({
   letter,
   onSelect,
+  onListen,
   onSelectCategory,
   showExcerpt = true,
 }) => {
@@ -22,6 +29,9 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
   // this SPA, so there's no need to react to storage updates while mounted.
   const [progress] = useState(() => getReadingProgress(letter.slug));
   const [completed] = useState(() => isLetterCompleted(letter.slug));
+  // Same rule the letter view uses to resume the reader's position, so
+  // "Continuar" picks up the narration where the reading/listening stopped.
+  const canContinue = !completed && progress > 3 && progress < READING_COMPLETE_THRESHOLD;
 
   return (
     <article
@@ -69,13 +79,43 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
         )}
 
         {/* Bottom meta row: Reading indicator and date */}
-        <div className="flex items-center gap-4 mt-2 font-sans text-xs text-[#8c8479] dark:text-[#7d756a]">
-          <span className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mt-2 font-sans text-xs text-[#8c8479] dark:text-[#7d756a]">
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
             <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
             <span>{letter.readingTime}</span>
           </span>
           <span>·</span>
-          <span>{letter.formattedDate}</span>
+          <span className="whitespace-nowrap">{letter.formattedDate}</span>
+
+          {onListen && letter.audioDuration && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation(); // don't also trigger the card's plain "open"
+                onListen(letter);
+              }}
+              aria-label={`${canContinue ? 'Continuar escuchando' : 'Escuchar'} «${letter.title}» (voz generada con IA)`}
+              title="Narración con voz generada por IA"
+              className="ml-auto shrink-0 inline-flex items-center gap-1.5 pl-2 pr-3 py-1 rounded-full border border-[#b84e2a]/40 dark:border-[#cf6e4b]/40 text-[#b84e2a] dark:text-[#cf6e4b] hover:bg-[#b84e2a] hover:text-white dark:hover:bg-[#cf6e4b] dark:hover:text-white hover:border-transparent transition-colors"
+            >
+              <Play className="w-3 h-3" fill="currentColor" />
+              {canContinue ? (
+                <>
+                  <span className="font-medium">Continuar</span>
+                  {/* Estimate: while narrating, the page follows the audio, so the
+                      saved scroll % tracks the audio's % closely. */}
+                  <span className="opacity-70">
+                    · quedan {Math.max(1, Math.ceil((letter.audioDuration * (1 - progress / 100)) / 60))} min
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="font-medium">Escuchar</span>
+                  <span className="opacity-70">· {Math.round(letter.audioDuration / 60)} min</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Reading progress: same signal as the bar shown inside the letter */}

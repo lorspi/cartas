@@ -237,6 +237,7 @@ export default function App() {
           <HomeView
             letters={INITIAL_LETTERS}
             onSelectLetter={(letter) => navigate({ type: 'letter', slug: letter.slug })}
+            onListenLetter={(letter) => navigate({ type: 'letter', slug: letter.slug, autoplay: true })}
             onNavigateArchive={(category) => navigate({ type: 'archive', category })}
             onNavigateAbout={() => navigate({ type: 'about' })}
           />
@@ -248,12 +249,14 @@ export default function App() {
             initialCategory={currentView.category}
             initialSearch={currentView.search}
             onSelectLetter={(letter) => navigate({ type: 'letter', slug: letter.slug })}
+            onListenLetter={(letter) => navigate({ type: 'letter', slug: letter.slug, autoplay: true })}
           />
         )}
 
         {currentView.type === 'letter' && currentLetter && (
           <LetterDetailView
             letter={currentLetter}
+            autoplayAudio={currentView.autoplay === true}
             allLetters={INITIAL_LETTERS}
             onBackToArchive={() => navigate({ type: 'archive' })}
             onSelectCategory={(category) => navigate({ type: 'archive', category })}
