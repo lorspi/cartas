@@ -172,10 +172,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   }, [autoPlay, data]);
 
   const markRef = useRef<HTMLDivElement | null>(null);
-  const markedRangeRef = useRef<Range | null>(null);
 
   const showMark = useCallback((range: Range | null) => {
-    markedRangeRef.current = range;
     if (!markRef.current) {
       if (!range) return;
       markRef.current = document.createElement('div');
@@ -193,24 +191,6 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   useEffect(() => clearHighlight, [clearHighlight, slug]);
 
-  // The mark is positioned in page pixels: redraw it whenever the text reflows
-  // (window resize, font size, focus mode, late-loading images…).
-  useEffect(() => {
-    if (!active) return;
-    const repaint = () => {
-      if (markRef.current && markedRangeRef.current?.startContainer.isConnected) {
-        paintMark(markRef.current, markedRangeRef.current);
-      }
-    };
-    const observer = new ResizeObserver(repaint);
-    for (const root of readAlongRoots()) observer.observe(root);
-    window.addEventListener('resize', repaint);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', repaint);
-    };
-  }, [active]);
-
   useEffect(
     () => () => {
       markRef.current?.remove();
@@ -219,18 +199,25 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     []
   );
 
-  /** Ranges are located lazily and rebuilt if React replaced the text nodes. */
+  /** Ranges are located lazily and rebuilt if React replaced the text nodes.
+   *  A range whose text node was removed collapses onto a connected ancestor,
+   *  so a live range is one that still starts inside a connected text node. */
+  const rangesFor = useCallback((fragments: AudioFragment[]): (Range | null)[] => {
+    let ranges = rangesRef.current;
+    // Check every range: the title, for one, is never replaced with the body.
+    const stale = ranges?.some(
+      (range) => range && (range.startContainer.nodeType !== Node.TEXT_NODE || !range.startContainer.isConnected)
+    );
+    if (!ranges || stale) {
+      ranges = locateFragments(readAlongRoots(), fragments);
+      rangesRef.current = ranges;
+    }
+    return ranges;
+  }, []);
+
   const rangeFor = useCallback(
-    (index: number, fragments: AudioFragment[]): Range | null => {
-      let ranges = rangesRef.current;
-      const stale = ranges?.[index] && !ranges[index]!.startContainer.isConnected;
-      if (!ranges || stale) {
-        ranges = locateFragments(readAlongRoots(), fragments);
-        rangesRef.current = ranges;
-      }
-      return ranges[index] ?? null;
-    },
-    []
+    (index: number, fragments: AudioFragment[]): Range | null => rangesFor(fragments)[index] ?? null,
+    [rangesFor]
   );
 
   /** Where the bar's bottom edge sits once stuck below the header (h-16). */
@@ -243,8 +230,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
    *  the sentence being read (30% down the area below the bar). Leans a little
    *  earlier so resuming never skips the sentence the reader stopped on. */
   const fragmentOnScreen = (fragments: AudioFragment[]): number => {
-    const ranges = rangesRef.current ?? locateFragments(readAlongRoots(), fragments);
-    rangesRef.current = ranges;
+    const ranges = rangesFor(fragments);
     const barBottom = stuckBarBottom();
     const line = barBottom + (window.innerHeight - barBottom) * 0.2;
     return ranges.findIndex((range) => range !== null && range.getBoundingClientRect().bottom >= line);
@@ -278,6 +264,42 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     },
     [data, following, rangeFor, scrollToRange, showMark]
   );
+
+  // Changing the font size, focus mode or theme re-renders the letter: React
+  // may replace its text nodes (leaving the located ranges collapsed) and the
+  // text reflows. Re-locate, redraw the mark and keep the sentence in view.
+  useEffect(() => {
+    if (!active || !data) return;
+    let frame = 0;
+    const refresh = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const index = currentRef.current;
+        if (index < 0) return;
+        const range = rangeFor(index, data.fragments);
+        showMark(range);
+        if (range && following && playing) scrollToRange(range);
+      });
+    };
+    const invalidate = () => {
+      rangesRef.current = null;
+      refresh();
+    };
+    const roots = readAlongRoots();
+    const resizes = new ResizeObserver(refresh);
+    const mutations = new MutationObserver(invalidate);
+    for (const root of roots) {
+      resizes.observe(root);
+      mutations.observe(root, { childList: true, subtree: true, characterData: true });
+    }
+    window.addEventListener('resize', refresh);
+    return () => {
+      cancelAnimationFrame(frame);
+      resizes.disconnect();
+      mutations.disconnect();
+      window.removeEventListener('resize', refresh);
+    };
+  }, [active, data, following, playing, rangeFor, scrollToRange, showMark]);
 
   // Manual scrolling pauses auto-follow for a moment so the reader isn't
   // dragged back while looking around the letter.
@@ -318,7 +340,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       const block = target.closest(BLOCKS);
       if (!root || !block || !root.contains(block)) return;
 
-      const ranges = data.fragments.map((_, i) => rangeFor(i, data.fragments));
+      const ranges = rangesFor(data.fragments);
       // Prefer the first sentence that starts in the paragraph; fall back to
       // one that runs into it from the previous paragraph.
       let index = ranges.findIndex((range) => range !== null && block.contains(range.startContainer));
@@ -344,7 +366,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         root.classList.remove('read-along-seekable');
       }
     };
-  }, [active, data, rangeFor, syncTo]);
+  }, [active, data, rangesFor, syncTo]);
 
   // Lock-screen / headset controls.
   useEffect(() => {
