@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { CheckIcon } from '@phosphor-icons/react';
 
 interface LetterProgressBarProps {
   /** Reader's current recorded position (0-100) for this letter. */
@@ -43,7 +43,7 @@ export const LetterProgressBar: React.FC<LetterProgressBarProps> = ({
 
       {isComplete && (
         <span className="flex items-center gap-1 font-sans text-[10px] uppercase tracking-wider text-[#7a8f6b] dark:text-[#96ab86] shrink-0">
-          <Check className="w-3 h-3" strokeWidth={2} />
+          <CheckIcon className="w-3 h-3" />
           <span>Leída</span>
         </span>
       )}

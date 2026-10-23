@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { SlidersHorizontal, RotateCcw } from 'lucide-react';
+import { ArrowCounterClockwiseIcon, SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Letter } from '../types';
 import { SearchBar } from '../components/SearchBar';
 import { CategoryFilter } from '../components/CategoryFilter';
@@ -191,7 +191,7 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
                   onClick={resetFilters}
                   className="text-[#b84e2a] dark:text-[#cf6e4b] hover:underline inline-flex items-center gap-1"
                 >
-                  <RotateCcw className="w-3 h-3" />
+                  <ArrowCounterClockwiseIcon className="w-3 h-3" />
                   <span>Limpiar filtros</span>
                 </button>
               </>
@@ -200,7 +200,7 @@ export const ArchiveView: React.FC<ArchiveViewProps> = ({
 
           {/* Chronological Sort selector */}
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <SlidersHorizontalIcon className="w-3.5 h-3.5" />
             <span>Ordenar:</span>
             <select
               id="sort-order-select"

@@ -1,5 +1,6 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
+import {IconContext} from '@phosphor-icons/react';
 import {registerSW} from 'virtual:pwa-register';
 import App from './App.tsx';
 import './index.css';
@@ -11,6 +12,9 @@ registerSW({ immediate: true });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    {/* Every icon in the site uses Phosphor's duotone weight. */}
+    <IconContext.Provider value={{ weight: 'duotone' }}>
+      <App />
+    </IconContext.Provider>
   </StrictMode>,
 );

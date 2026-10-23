@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { ListIcon, XIcon } from '@phosphor-icons/react';
 import { ThemeToggle } from './ThemeToggle';
 import { OfflineIndicator } from './OfflineIndicator';
 import { ThemeMode, AppView } from '../types';
@@ -100,9 +100,9 @@ export const Header: React.FC<HeaderProps> = ({
             className="p-2 text-[#211e1c] dark:text-[#ede7e0] hover:bg-[#dad4cb]/40 dark:hover:bg-[#2a2927] rounded-sm transition-colors"
           >
             {mobileMenuOpen ? (
-              <X className="w-5 h-5" strokeWidth={1.75} />
+              <XIcon className="w-5 h-5" />
             ) : (
-              <Menu className="w-5 h-5" strokeWidth={1.75} />
+              <ListIcon className="w-5 h-5" />
             )}
           </button>
         </div>

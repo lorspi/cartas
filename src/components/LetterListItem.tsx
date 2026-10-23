@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, ArrowUpRight, Play } from 'lucide-react';
+import { ArrowUpRightIcon, ClockIcon, PlayIcon } from '@phosphor-icons/react';
 import { Letter } from '../types';
 import { CategoryBadge } from './CategoryBadge';
 import { LetterProgressBar } from './LetterProgressBar';
@@ -68,7 +68,7 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
           <h3 className="font-serif text-xl sm:text-2xl md:text-2xl font-normal text-[#211e1c] dark:text-[#ede7e0] leading-snug group-hover:text-[#b84e2a] dark:group-hover:text-[#cf6e4b] transition-colors">
             {letter.title}
           </h3>
-          <ArrowUpRight className="w-4 h-4 text-[#8c8479] dark:text-[#7d756a] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 hidden sm:block" />
+          <ArrowUpRightIcon className="w-4 h-4 text-[#8c8479] dark:text-[#7d756a] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 hidden sm:block" />
         </div>
 
         {/* Excerpt */}
@@ -81,7 +81,7 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
         {/* Bottom meta row: Reading indicator and date */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mt-2 font-sans text-xs text-[#8c8479] dark:text-[#7d756a]">
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5" strokeWidth={1.5} />
+            <ClockIcon className="w-3.5 h-3.5" />
             <span>{letter.readingTime}</span>
           </span>
           <span>·</span>
@@ -98,7 +98,7 @@ export const LetterListItem: React.FC<LetterListItemProps> = ({
               title="Narración con voz generada por IA"
               className="ml-auto shrink-0 inline-flex items-center gap-1.5 pl-2 pr-3 py-1 rounded-full border border-[#b84e2a]/40 dark:border-[#cf6e4b]/40 text-[#b84e2a] dark:text-[#cf6e4b] hover:bg-[#b84e2a] hover:text-white dark:hover:bg-[#cf6e4b] dark:hover:text-white hover:border-transparent transition-colors"
             >
-              <Play className="w-3 h-3" fill="currentColor" />
+              <PlayIcon className="w-3 h-3" />
               {canContinue ? (
                 <>
                   <span className="font-medium">Continuar</span>

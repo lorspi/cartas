@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, X } from 'lucide-react';
+import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 
 interface SearchBarProps {
   value: string;
@@ -17,9 +17,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className={`relative w-full ${className}`}>
       <div className="relative flex items-center">
-        <Search
+        <MagnifyingGlassIcon
           className="absolute left-3.5 w-4 h-4 text-[#8c8479] dark:text-[#7d756a] pointer-events-none"
-          strokeWidth={1.75}
         />
         <input
           id="archive-search-input"
@@ -36,7 +35,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             aria-label="Limpiar búsqueda"
             className="absolute right-3 p-1 text-[#8c8479] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
           >
-            <X className="w-4 h-4" strokeWidth={1.75} />
+            <XIcon className="w-4 h-4" />
           </button>
         )}
       </div>

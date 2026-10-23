@@ -1,5 +1,5 @@
 import React, { useId, useState } from 'react';
-import { WifiOff } from 'lucide-react';
+import { WifiSlashIcon } from '@phosphor-icons/react';
 import { useConnectivity } from '../hooks/useConnectivity';
 
 interface OfflineIndicatorProps {
@@ -43,7 +43,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
         onClick={() => setOpen(true)}
         className={`inline-flex items-center justify-center text-[#8c8479] dark:text-[#7d756a] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors ${className}`}
       >
-        <WifiOff className={iconClassName} strokeWidth={1.75} />
+        <WifiSlashIcon className={iconClassName} />
       </button>
 
       <div

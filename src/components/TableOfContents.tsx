@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { List, X } from 'lucide-react';
+import { ListBulletsIcon, XIcon } from '@phosphor-icons/react';
 import { TocHeading } from '../utils/toc';
 
 interface TableOfContentsProps {
@@ -281,7 +281,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
           aria-label="Abrir índice de la carta"
           className="fixed bottom-5 left-4 sm:bottom-6 sm:left-6 z-40 inline-flex items-center gap-2 pl-3 pr-4 py-2 rounded-full bg-[#ece9e4]/95 dark:bg-[#1c1b1b]/95 shadow-lg ring-1 ring-[#dad4cb]/60 dark:ring-[#383633]/60 backdrop-blur-xs text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
         >
-          <List className="w-4 h-4" strokeWidth={1.75} />
+          <ListBulletsIcon className="w-4 h-4" />
           <span className="font-sans text-xs uppercase tracking-wider">Índice</span>
         </button>
 
@@ -312,7 +312,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
                   aria-label="Cerrar índice"
                   className="text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <XIcon className="w-5 h-5" />
                 </button>
               </div>
               <div className="px-4 py-4">{list}</div>

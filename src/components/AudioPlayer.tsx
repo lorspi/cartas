@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Bot, Headphones, LocateFixed, Pause, Play, RotateCcw, RotateCw, X } from 'lucide-react';
+import { CrosshairIcon, FastForwardIcon, HeadphonesIcon, PauseIcon, PlayIcon, RewindIcon, RobotIcon, XIcon } from '@phosphor-icons/react';
 import { AudioFragment, LetterAudio, fragmentAt, locateFragments } from '../utils/readAlong';
 
-const HIGHLIGHT_NAME = 'carta-lectura';
 const SPEEDS = [1, 1.15, 1.3, 0.85];
 /** After the reader scrolls by hand, stop auto-following for this long. */
 const FOLLOW_PAUSE_MS = 6000;
@@ -15,8 +14,59 @@ function formatTime(seconds: number): string {
   return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
 }
 
-function supportsHighlights(): boolean {
-  return typeof CSS !== 'undefined' && 'highlights' in CSS && typeof Highlight !== 'undefined';
+/** Paints the sentence being read as one box per line, stretched to the full
+ *  line height so consecutive lines join into a single block (the CSS Custom
+ *  Highlight API can't pad or fill the leading). The boxes live in a layer on
+ *  top of the page and blend with the text, see `.read-along-mark`. */
+function paintMark(layer: HTMLElement, range: Range | null) {
+  layer.replaceChildren();
+  const el = range?.startContainer.parentElement;
+  if (!range || !el) return;
+
+  const style = getComputedStyle(el);
+  const fontSize = parseFloat(style.fontSize) || 16;
+  const lineHeight = parseFloat(style.lineHeight) || fontSize * 1.2;
+  const padX = fontSize * 0.3;
+  const radius = fontSize * 0.2;
+
+  // Merge the range's rects (text runs, <em>, <strong>…) into one per line.
+  const lines: { left: number; right: number; mid: number }[] = [];
+  for (const rect of Array.from(range.getClientRects())) {
+    if (rect.width < 1 || rect.height < 1) continue;
+    const mid = (rect.top + rect.bottom) / 2;
+    const line = lines.find((l) => Math.abs(l.mid - mid) < lineHeight / 2);
+    if (line) {
+      line.left = Math.min(line.left, rect.left);
+      line.right = Math.max(line.right, rect.right);
+    } else {
+      lines.push({ left: rect.left, right: rect.right, mid });
+    }
+  }
+  lines.sort((a, b) => a.mid - b.mid);
+
+  // Neighbouring lines share an edge (rounded to whole pixels so no seam shows);
+  // a sentence running into the next paragraph doesn't bridge the margin.
+  const joined = (a?: (typeof lines)[number], b?: (typeof lines)[number]) =>
+    !!a && !!b && b.mid - a.mid <= lineHeight * 1.1;
+  const { scrollX, scrollY } = window;
+  lines.forEach((line, i) => {
+    const prev = joined(lines[i - 1], line) ? lines[i - 1] : undefined;
+    const next = joined(line, lines[i + 1]) ? lines[i + 1] : undefined;
+    const top = Math.round(scrollY + (prev ? (prev.mid + line.mid) / 2 : line.mid - lineHeight / 2));
+    const bottom = Math.round(scrollY + (next ? (line.mid + next.mid) / 2 : line.mid + lineHeight / 2));
+    const left = line.left - padX;
+    const right = line.right + padX;
+    // Round only the corners that stick out past the neighbouring line.
+    const corner = (outside: boolean) => (outside ? `${radius}px` : '0');
+    const box = document.createElement('span');
+    box.style.cssText = `top:${top}px;left:${left + scrollX}px;width:${right - left}px;height:${bottom - top}px;border-radius:${[
+      corner(!prev || prev.left - padX > left),
+      corner(!prev || prev.right + padX < right),
+      corner(!next || next.right + padX < right),
+      corner(!next || next.left - padX > left),
+    ].join(' ')}`;
+    layer.append(box);
+  });
 }
 
 /** Elements whose text the narration reads: the title and the letter body. */
@@ -121,12 +171,53 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     // Runs once per loaded letter; the other inputs are read at that moment.
   }, [autoPlay, data]);
 
-  const clearHighlight = useCallback(() => {
-    if (supportsHighlights()) CSS.highlights.delete(HIGHLIGHT_NAME);
-    currentRef.current = -1;
+  const markRef = useRef<HTMLDivElement | null>(null);
+  const markedRangeRef = useRef<Range | null>(null);
+
+  const showMark = useCallback((range: Range | null) => {
+    markedRangeRef.current = range;
+    if (!markRef.current) {
+      if (!range) return;
+      markRef.current = document.createElement('div');
+      markRef.current.className = 'read-along-mark';
+      markRef.current.setAttribute('aria-hidden', 'true');
+      document.body.append(markRef.current);
+    }
+    paintMark(markRef.current, range);
   }, []);
 
+  const clearHighlight = useCallback(() => {
+    showMark(null);
+    currentRef.current = -1;
+  }, [showMark]);
+
   useEffect(() => clearHighlight, [clearHighlight, slug]);
+
+  // The mark is positioned in page pixels: redraw it whenever the text reflows
+  // (window resize, font size, focus mode, late-loading images…).
+  useEffect(() => {
+    if (!active) return;
+    const repaint = () => {
+      if (markRef.current && markedRangeRef.current?.startContainer.isConnected) {
+        paintMark(markRef.current, markedRangeRef.current);
+      }
+    };
+    const observer = new ResizeObserver(repaint);
+    for (const root of readAlongRoots()) observer.observe(root);
+    window.addEventListener('resize', repaint);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', repaint);
+    };
+  }, [active]);
+
+  useEffect(
+    () => () => {
+      markRef.current?.remove();
+      markRef.current = null;
+    },
+    []
+  );
 
   /** Ranges are located lazily and rebuilt if React replaced the text nodes. */
   const rangeFor = useCallback(
@@ -182,13 +273,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       if (index === currentRef.current && !forceScroll) return;
       currentRef.current = index;
       const range = index >= 0 ? rangeFor(index, data.fragments) : null;
-      if (supportsHighlights()) {
-        if (range) CSS.highlights.set(HIGHLIGHT_NAME, new Highlight(range));
-        else CSS.highlights.delete(HIGHLIGHT_NAME);
-      }
+      showMark(range);
       if (range && (following || forceScroll)) scrollToRange(range);
     },
-    [data, following, rangeFor, scrollToRange]
+    [data, following, rangeFor, scrollToRange, showMark]
   );
 
   // Manual scrolling pauses auto-follow for a moment so the reader isn't
@@ -213,6 +301,50 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       window.clearTimeout(followTimer.current);
     };
   }, [playing]);
+
+  // While listening, tapping a paragraph (or the title) jumps the narration to
+  // its first sentence and keeps reading from there.
+  useEffect(() => {
+    if (!active || !data) return;
+    const roots = readAlongRoots();
+    const BLOCKS = 'p, li, blockquote, h1, h2, h3, h4, h5, h6, pre, figcaption';
+
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      // Links, buttons and text selections keep their usual behaviour.
+      if (!target || target.closest('a, button, input, label, summary')) return;
+      if (!window.getSelection()?.isCollapsed) return;
+      const root = roots.find((r) => r.contains(target));
+      const block = target.closest(BLOCKS);
+      if (!root || !block || !root.contains(block)) return;
+
+      const ranges = data.fragments.map((_, i) => rangeFor(i, data.fragments));
+      // Prefer the first sentence that starts in the paragraph; fall back to
+      // one that runs into it from the previous paragraph.
+      let index = ranges.findIndex((range) => range !== null && block.contains(range.startContainer));
+      if (index === -1) index = ranges.findIndex((range) => range !== null && range.intersectsNode(block));
+      const audio = audioRef.current;
+      if (index === -1 || !audio) return;
+
+      audio.currentTime = data.fragments[index].start;
+      setTime(audio.currentTime);
+      window.clearTimeout(followTimer.current);
+      setFollowing(true);
+      syncTo(audio.currentTime, true);
+      if (audio.paused) void audio.play();
+    };
+
+    for (const root of roots) {
+      root.addEventListener('click', onClick);
+      root.classList.add('read-along-seekable');
+    }
+    return () => {
+      for (const root of roots) {
+        root.removeEventListener('click', onClick);
+        root.classList.remove('read-along-seekable');
+      }
+    };
+  }, [active, data, rangeFor, syncTo]);
 
   // Lock-screen / headset controls.
   useEffect(() => {
@@ -288,9 +420,12 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     syncTo(audioRef.current?.currentTime ?? time, true);
   };
 
-  // No `display` utility here so callers can choose (e.g. `hidden sm:inline-flex`).
+  // Same look as the reading controls. No `display` utility here so callers
+  // can choose (e.g. `hidden sm:inline-flex`).
   const iconButton =
-    'items-center justify-center min-w-9 h-9 rounded-full text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] hover:bg-[#dad4cb]/40 dark:hover:bg-[#383633]/60 transition-colors';
+    'items-center justify-center min-w-8 h-8 rounded-full text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] transition-colors';
+  const divider = 'h-3.5 w-px bg-[#dad4cb] dark:bg-[#383633] mx-1';
+  const progress = duration ? Math.min(100, (time / duration) * 100) : 0;
 
   return (
     <div
@@ -328,24 +463,32 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <div
         role="region"
         aria-label="Versión narrada de la carta"
-        className={`rounded-lg border border-[#dad4cb] dark:border-[#383633] bg-[#f5f1ec] dark:bg-[#201f1d] ${
-          active ? 'shadow-lg' : 'shadow-xs'
+        className={`rounded-xs border border-[#dad4cb] dark:border-[#383633] bg-[#f5f1ec] dark:bg-[#242321] transition-shadow ${
+          active ? 'shadow-[0_10px_24px_-14px_rgb(33_30_28/0.35)] dark:shadow-[0_10px_24px_-14px_rgb(0_0_0/0.7)]' : 'shadow-xs'
         }`}
       >
-        <div className="flex items-center gap-3 px-3 sm:px-4 py-3">
+        <div className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 ${active ? 'py-2.5' : 'py-3.5'}`}>
           <button
             type="button"
             onClick={togglePlay}
             aria-label={playing ? 'Pausar narración' : 'Escuchar la carta'}
-            className={`shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full bg-[#b84e2a] dark:bg-[#cf6e4b] text-white hover:bg-[#a04322] dark:hover:bg-[#d97e5c] transition-colors shadow-sm ${
+            className={`shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#211e1c] dark:bg-[#ede7e0] text-[#ece9e4] dark:text-[#1c1b1b] hover:bg-[#b84e2a] dark:hover:bg-[#cf6e4b] dark:hover:text-white transition-colors ${
               needsTap ? 'ring-4 ring-[#b84e2a]/30 dark:ring-[#cf6e4b]/30 animate-pulse' : ''
             }`}
           >
-            {playing ? <Pause className="w-5 h-5" fill="currentColor" /> : <Play className="w-5 h-5 ml-0.5" fill="currentColor" />}
+            {playing ? <PauseIcon className="w-5 h-5" /> : <PlayIcon className="w-5 h-5 ml-0.5" />}
           </button>
 
           {active ? (
             <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2 font-sans text-[11px] text-[#8c8479] dark:text-[#7d756a] tabular-nums">
+                <span>{formatTime(time)}</span>
+                <span className="inline-flex items-center gap-1 min-w-0 uppercase tracking-wider text-[10px]">
+                  <RobotIcon className="w-3.5 h-3.5 shrink-0 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
+                  <span className="truncate">Voz generada con IA</span>
+                </span>
+                <span>−{formatTime(duration - time)}</span>
+              </div>
               <input
                 type="range"
                 min={0}
@@ -355,53 +498,56 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
                 onChange={(e) => seekTo(Number(e.target.value))}
                 aria-label="Posición de la narración"
                 aria-valuetext={`${formatTime(time)} de ${formatTime(duration)}`}
-                className="w-full h-1.5 accent-[#b84e2a] dark:accent-[#cf6e4b] cursor-pointer"
+                className="audio-range block w-full mt-1"
+                style={{ '--progress': `${progress}%` } as React.CSSProperties}
               />
-              <div className="flex items-center justify-between gap-2 mt-1 font-sans text-[11px] text-[#8c8479] dark:text-[#7d756a] tabular-nums">
-                <span>{formatTime(time)}</span>
-                <span className="inline-flex items-center gap-1 truncate">
-                  <Bot className="w-3 h-3 shrink-0 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
-                  <span className="truncate">Voz generada con IA</span>
-                </span>
-                <span>-{formatTime(duration - time)}</span>
-              </div>
             </div>
           ) : (
             <div className="flex-1 min-w-0">
-              <p className="font-sans text-sm font-medium text-[#211e1c] dark:text-[#ede7e0] inline-flex items-center gap-1.5">
-                <Headphones className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
-                {needsTap ? 'Toca ▶ para empezar a escuchar' : `Escuchar la carta · ${formatTime(duration)}`}
+              <p className="font-sans text-[11px] uppercase tracking-wider text-[#6b645c] dark:text-[#9c958c] inline-flex items-center gap-1.5">
+                <HeadphonesIcon className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
+                {needsTap ? (
+                  <span className="text-[#211e1c] dark:text-[#ede7e0] font-medium">Toca ▶ para empezar a escuchar</span>
+                ) : (
+                  <>
+                    <span className="text-[#211e1c] dark:text-[#ede7e0] font-medium">Escuchar la carta</span>
+                    <span>· {formatTime(duration)}</span>
+                  </>
+                )}
               </p>
-              <p className="font-sans text-xs text-[#6b645c] dark:text-[#9c958c] mt-0.5 leading-snug">
-                <Bot className="inline w-3.5 h-3.5 -mt-0.5 mr-1 text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
+              <p className="font-serif italic text-sm text-[#6b645c] dark:text-[#9c958c] mt-1 leading-snug">
+                <RobotIcon className="inline w-3.5 h-3.5 -mt-0.5 mr-1 not-italic text-[#b84e2a] dark:text-[#cf6e4b]" aria-hidden="true" />
                 Narración con voz generada por inteligencia artificial a partir de la voz del autor.
               </p>
             </div>
           )}
 
           {active && (
-            <div className="flex items-center shrink-0">
-              <button type="button" onClick={() => seekTo(time - 15)} aria-label="Retroceder 15 segundos" className={`${iconButton} hidden sm:inline-flex`}>
-                <RotateCcw className="w-4 h-4" />
+            <div className="flex items-center shrink-0 text-[#6b645c] dark:text-[#9c958c]">
+              <button type="button" onClick={() => seekTo(time - 15)} aria-label="Retroceder 15 segundos" title="Retroceder 15 s" className={`${iconButton} hidden sm:inline-flex`}>
+                <RewindIcon className="w-4 h-4" />
               </button>
-              <button type="button" onClick={() => seekTo(time + 15)} aria-label="Adelantar 15 segundos" className={`${iconButton} hidden sm:inline-flex`}>
-                <RotateCw className="w-4 h-4" />
+              <button type="button" onClick={() => seekTo(time + 15)} aria-label="Adelantar 15 segundos" title="Adelantar 15 s" className={`${iconButton} hidden sm:inline-flex`}>
+                <FastForwardIcon className="w-4 h-4" />
               </button>
+              <span className={`${divider} hidden sm:block`} aria-hidden="true" />
               <button
                 type="button"
                 onClick={cycleSpeed}
                 aria-label={`Velocidad ${SPEEDS[speedIndex]}x`}
-                className={`${iconButton} inline-flex px-2 font-sans text-xs font-semibold tabular-nums`}
+                title="Velocidad de lectura"
+                className={`${iconButton} inline-flex px-2 font-serif text-xs tabular-nums`}
               >
                 {SPEEDS[speedIndex]}×
               </button>
               {!following && playing && (
                 <button type="button" onClick={resumeFollowing} aria-label="Volver al texto que se está leyendo" title="Volver al texto" className={`${iconButton} inline-flex`}>
-                  <LocateFixed className="w-4 h-4" />
+                  <CrosshairIcon className="w-4 h-4" />
                 </button>
               )}
-              <button type="button" onClick={close} aria-label="Cerrar reproductor" className={`${iconButton} inline-flex`}>
-                <X className="w-4 h-4" />
+              <span className={divider} aria-hidden="true" />
+              <button type="button" onClick={close} aria-label="Cerrar reproductor" title="Cerrar" className={`${iconButton} inline-flex`}>
+                <XIcon className="w-4 h-4" />
               </button>
             </div>
           )}

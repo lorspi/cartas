@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, BookOpen, Minimize2 } from 'lucide-react';
+import { ArrowsInIcon, BookOpenIcon, MoonIcon, SunIcon } from '@phosphor-icons/react';
 import { OfflineIndicator } from './OfflineIndicator';
 import { ThemeMode, FontSizeScale } from '../types';
 
@@ -105,9 +105,9 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
         className="p-1.5 rounded-full hover:bg-[#ece9e4] dark:hover:bg-[#2a2927] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors"
       >
         {theme === 'dark' ? (
-          <Sun className="w-3.5 h-3.5 text-[#d0a65c]" strokeWidth={1.75} />
+          <SunIcon className="w-3.5 h-3.5 text-[#d0a65c]" />
         ) : (
-          <Moon className="w-3.5 h-3.5 text-[#5d4837]" strokeWidth={1.75} />
+          <MoonIcon className="w-3.5 h-3.5 text-[#5d4837]" />
         )}
       </button>
 
@@ -132,12 +132,12 @@ export const ReadingControls: React.FC<ReadingControlsProps> = ({
       >
         {isFocusMode ? (
           <>
-            <Minimize2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <ArrowsInIcon className="w-3.5 h-3.5" />
             <span className="hidden sm:inline text-[11px]">Normal</span>
           </>
         ) : (
           <>
-            <BookOpen className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <BookOpenIcon className="w-3.5 h-3.5" />
             <span className="hidden sm:inline text-[11px]">Lectura</span>
           </>
         )}

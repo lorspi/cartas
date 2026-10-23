@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { ArrowLeftIcon, ArrowRightIcon, BookmarkSimpleIcon, CheckIcon, RobotIcon, ShareNetworkIcon, UserIcon } from '@phosphor-icons/react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import { ArrowLeft, ArrowRight, Share2, Check, Bookmark } from 'lucide-react';
 import { Letter, ThemeMode, FontSizeScale } from '../types';
-import { Bot, User } from 'lucide-react';
 import { ReadingControls } from '../components/ReadingControls';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { CategoryBadge } from '../components/CategoryBadge';
@@ -59,7 +58,7 @@ function AiConversation({ turns, source }: { turns: string[]; source?: string })
     >
       {/* Header: makes explicit this is an external example */}
       <div className="flex items-center gap-2 px-4 sm:px-5 py-3 border-b border-[#dad4cb]/70 dark:border-[#383633]/70 bg-[#ece9e4]/80 dark:bg-[#1a1918]/80">
-        <Bot className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b] shrink-0" />
+        <RobotIcon className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b] shrink-0" />
         <span className="font-sans text-[11px] uppercase tracking-wider text-[#6b645c] dark:text-[#9c958c]">
           {source ?? 'Conversación de ejemplo'}
         </span>
@@ -94,7 +93,7 @@ function AiConversation({ turns, source }: { turns: string[]; source?: string })
                   }`}
                   aria-hidden="true"
                 >
-                  {isAI ? <Bot className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
+                  {isAI ? <RobotIcon className="w-3.5 h-3.5" /> : <UserIcon className="w-3.5 h-3.5" />}
                 </span>
 
                 {/* Bubble */}
@@ -521,7 +520,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
               onClick={onBackToArchive}
               className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-wider text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors group"
             >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeftIcon className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
               <span>Volver al archivo</span>
             </button>
           </nav>
@@ -598,7 +597,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
         {/* Colophon of the Letter */}
         <div className="mt-16 pt-8 border-t border-[#dad4cb] dark:border-[#383633] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-sans text-xs text-[#8c8479] dark:text-[#7d756a]">
           <div className="flex items-center gap-2">
-            <Bookmark className="w-3.5 h-3.5 text-[#b84e2a] dark:text-[#cf6e4b]" />
+            <BookmarkSimpleIcon className="w-3.5 h-3.5 text-[#b84e2a] dark:text-[#cf6e4b]" />
             <span>Conservado en el archivo de «Cartas que quedan» · {letter.year}</span>
           </div>
 
@@ -609,12 +608,12 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 text-[#b84e2a]" />
+                <CheckIcon className="w-3.5 h-3.5 text-[#b84e2a]" />
                 <span>Enlace copiado</span>
               </>
             ) : (
               <>
-                <Share2 className="w-3.5 h-3.5" />
+                <ShareNetworkIcon className="w-3.5 h-3.5" />
                 <span>Compartir carta</span>
               </>
             )}
@@ -635,7 +634,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
                 className="group text-left p-4 border border-[#dad4cb] dark:border-[#383633] hover:border-[#b84e2a] dark:hover:border-[#cf6e4b] rounded-xs transition-colors bg-[#f5f1ec]/50 dark:bg-[#242321]/50"
               >
                 <span className="font-sans text-[11px] uppercase tracking-wider text-[#8c8479] dark:text-[#7d756a] inline-flex items-center gap-1">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" />
+                  <ArrowLeftIcon className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" />
                   <span>Carta anterior</span>
                 </span>
                 <p className="font-serif text-base text-[#211e1c] dark:text-[#ede7e0] font-normal mt-1 line-clamp-1 group-hover:text-[#b84e2a] dark:group-hover:text-[#cf6e4b] transition-colors">
@@ -654,7 +653,7 @@ export const LetterDetailView: React.FC<LetterDetailViewProps> = ({
               >
                 <span className="font-sans text-[11px] uppercase tracking-wider text-[#8c8479] dark:text-[#7d756a] inline-flex items-center gap-1 justify-end">
                   <span>Siguiente carta</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRightIcon className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
                 <p className="font-serif text-base text-[#211e1c] dark:text-[#ede7e0] font-normal mt-1 line-clamp-1 group-hover:text-[#b84e2a] dark:group-hover:text-[#cf6e4b] transition-colors">
                   {nextLetter.title}

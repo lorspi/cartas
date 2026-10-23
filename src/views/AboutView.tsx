@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Feather } from 'lucide-react';
+import { ArrowLeftIcon, FeatherIcon } from '@phosphor-icons/react';
 
 interface AboutViewProps {
   onBackToHome: () => void;
@@ -15,7 +15,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onBackToHome, onGoToArchiv
           onClick={onBackToHome}
           className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-wider text-[#6b645c] dark:text-[#9c958c] hover:text-[#211e1c] dark:hover:text-[#ede7e0] transition-colors group"
         >
-          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeftIcon className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
           <span>Volver a la portada</span>
         </button>
       </nav>
@@ -24,7 +24,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onBackToHome, onGoToArchiv
         {/* Header */}
         <header className="mb-14 pb-8 border-b border-[#dad4cb] dark:border-[#383633]">
           <div className="flex items-center gap-2.5 mb-4">
-            <Feather className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b]" strokeWidth={1.75} />
+            <FeatherIcon className="w-4 h-4 text-[#b84e2a] dark:text-[#cf6e4b]" />
             <span className="font-sans text-xs uppercase tracking-widest text-[#b84e2a] dark:text-[#cf6e4b] font-medium">
               Manifiesto Editorial
             </span>

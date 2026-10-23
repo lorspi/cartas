@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BookMarked, Compass } from 'lucide-react';
+import { ArrowRightIcon, BookBookmarkIcon } from '@phosphor-icons/react';
 import { Letter } from '../types';
 import { LetterList } from '../components/LetterList';
 import { CATEGORIES } from '../data/letters';
@@ -62,7 +62,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#211e1c] dark:bg-[#ede7e0] text-[#ece9e4] dark:text-[#1c1b1b] hover:bg-[#b84e2a] dark:hover:bg-[#cf6e4b] dark:hover:text-white transition-colors rounded-xs"
             >
               <span>Abrir archivo completo</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRightIcon className="w-3.5 h-3.5" />
             </button>
 
             <button
@@ -93,7 +93,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             className="font-sans text-xs uppercase tracking-wider text-[#b84e2a] dark:text-[#cf6e4b] hover:underline inline-flex items-center gap-1.5"
           >
             <span>Ver todo el índice ({letters.length})</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRightIcon className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -162,7 +162,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
                 <span className="font-sans text-[11px] text-[#b84e2a] dark:text-[#cf6e4b] opacity-0 group-hover:opacity-100 transition-opacity mt-4 inline-flex items-center gap-1">
                   <span>Ver cartas</span>
-                  <ArrowRight className="w-3 h-3" />
+                  <ArrowRightIcon className="w-3 h-3" />
                 </span>
               </button>
             );
@@ -184,7 +184,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* Bookish Colophon Card on Home */}
       <section className="mt-8 p-8 sm:p-12 border border-[#dad4cb] dark:border-[#383633] bg-[#f5f1ec] dark:bg-[#242321] rounded-xs text-center max-w-2xl mx-auto">
-        <BookMarked className="w-6 h-6 mx-auto text-[#b84e2a] dark:text-[#cf6e4b] stroke-[1.25]" />
+        <BookBookmarkIcon className="w-6 h-6 mx-auto text-[#b84e2a] dark:text-[#cf6e4b]" />
         <p className="font-serif text-lg sm:text-xl text-[#211e1c] dark:text-[#ede7e0] mt-4 italic font-normal">
           «Una carta es una conversación que se niega a extinguirse con el ruido del presente.»
         </p>

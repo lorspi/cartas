@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { MoonIcon, SunIcon } from '@phosphor-icons/react';
 import { ThemeMode } from '../types';
 
 interface ThemeToggleProps {
@@ -27,9 +27,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       className={`inline-flex items-center gap-2 px-2.5 py-1.5 rounded-sm transition-colors text-xs font-sans tracking-wide text-[#6b645c] hover:text-[#211e1c] dark:text-[#9c958c] dark:hover:text-[#ede7e0] hover:bg-[#ece9e4]/60 dark:hover:bg-[#2a2927] border border-transparent hover:border-[#dad4cb]/70 dark:hover:border-[#383633] ${className}`}
     >
       {isDark ? (
-        <Sun className="w-3.5 h-3.5 text-[#d0a65c]" strokeWidth={1.75} />
+        <SunIcon className="w-3.5 h-3.5 text-[#d0a65c]" />
       ) : (
-        <Moon className="w-3.5 h-3.5 text-[#5d4837]" strokeWidth={1.75} />
+        <MoonIcon className="w-3.5 h-3.5 text-[#5d4837]" />
       )}
       {variant === 'labeled' && (
         <span className="font-normal">{isDark ? 'Modo papel' : 'Modo noche'}</span>
