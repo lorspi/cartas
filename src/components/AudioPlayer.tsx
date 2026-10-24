@@ -16,8 +16,8 @@ function formatTime(seconds: number): string {
 
 /** Paints the sentence being read as one box per line, stretched to the full
  *  line height so consecutive lines join into a single block (the CSS Custom
- *  Highlight API can't pad or fill the leading). The boxes live in a layer on
- *  top of the page and blend with the text, see `.read-along-mark`. */
+ *  Highlight API can't pad or fill the leading). The boxes live in a layer
+ *  painted behind the letter's text, see `.read-along-mark`. */
 function paintMark(layer: HTMLElement, range: Range | null) {
   layer.replaceChildren();
   const el = range?.startContainer.parentElement;
@@ -48,18 +48,19 @@ function paintMark(layer: HTMLElement, range: Range | null) {
   // a sentence running into the next paragraph doesn't bridge the margin.
   const joined = (a?: (typeof lines)[number], b?: (typeof lines)[number]) =>
     !!a && !!b && b.mid - a.mid <= lineHeight * 1.1;
-  const { scrollX, scrollY } = window;
+  // The layer is absolutely positioned inside the letter's <article>.
+  const origin = (layer.offsetParent ?? document.body).getBoundingClientRect();
   lines.forEach((line, i) => {
     const prev = joined(lines[i - 1], line) ? lines[i - 1] : undefined;
     const next = joined(line, lines[i + 1]) ? lines[i + 1] : undefined;
-    const top = Math.round(scrollY + (prev ? (prev.mid + line.mid) / 2 : line.mid - lineHeight / 2));
-    const bottom = Math.round(scrollY + (next ? (line.mid + next.mid) / 2 : line.mid + lineHeight / 2));
+    const top = Math.round(-origin.top + (prev ? (prev.mid + line.mid) / 2 : line.mid - lineHeight / 2));
+    const bottom = Math.round(-origin.top + (next ? (line.mid + next.mid) / 2 : line.mid + lineHeight / 2));
     const left = line.left - padX;
     const right = line.right + padX;
     // Round only the corners that stick out past the neighbouring line.
     const corner = (outside: boolean) => (outside ? `${radius}px` : '0');
     const box = document.createElement('span');
-    box.style.cssText = `top:${top}px;left:${left + scrollX}px;width:${right - left}px;height:${bottom - top}px;border-radius:${[
+    box.style.cssText = `top:${top}px;left:${left - origin.left}px;width:${right - left}px;height:${bottom - top}px;border-radius:${[
       corner(!prev || prev.left - padX > left),
       corner(!prev || prev.right + padX < right),
       corner(!next || next.right + padX < right),
@@ -179,8 +180,12 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       markRef.current = document.createElement('div');
       markRef.current.className = 'read-along-mark';
       markRef.current.setAttribute('aria-hidden', 'true');
-      document.body.append(markRef.current);
     }
+    // First child of the letter's <article> so the title and body, painted
+    // later, cover it: the mark sits behind the text instead of blending over
+    // it (mix-blend-mode isn't reliable on iOS WebKit and left opaque boxes).
+    const article = document.getElementById('letter-top')?.closest('article');
+    if (article && article.firstChild !== markRef.current) article.prepend(markRef.current);
     paintMark(markRef.current, range);
   }, []);
 

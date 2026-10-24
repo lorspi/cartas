@@ -62,29 +62,29 @@
 }
 
 /* Sentence being narrated: one box per line, drawn by AudioPlayer in a layer
-   above the text. Multiply (paper) / screen (night ink) tint the background
-   without washing out the letters. Stays below the sticky player (z-30). */
+   at the start of the letter's <article>. The title and body are positioned
+   (without z-index) so, coming later in the page, they paint over the layer:
+   the boxes stay behind the text. */
 .read-along-mark {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 20;
   pointer-events: none;
-  mix-blend-mode: multiply;
+}
+
+#letter-top,
+#letter-reading-body {
+  position: relative;
 }
 
 .read-along-mark > span {
   position: absolute;
-  background-color: rgb(255 238 190);
+  background-color: rgb(236 217 170);
   animation: read-along-in 0.2s ease-out;
 }
 
-.dark .read-along-mark {
-  mix-blend-mode: screen;
-}
-
 .dark .read-along-mark > span {
-  background-color: rgb(70 52 22);
+  background-color: rgb(90 73 47);
 }
 
 @keyframes read-along-in {
